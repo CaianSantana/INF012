@@ -6,12 +6,13 @@ import java.net.Socket;
 import java.util.Random;
 import java.util.Scanner;
 
+
 public class ClientReceiverServer implements Runnable{
 
 	
 	static private String message;
 	static private String ipClient;
-	static private int newAcessKey;
+	static private Boolean newAcess = false;
 	
 	public static String getMessage() {
 		return ClientReceiverServer.message;
@@ -25,12 +26,8 @@ public class ClientReceiverServer implements Runnable{
 	public static void setIpClient(String ipClient) {
 		ClientReceiverServer.ipClient = ipClient;
 	}
-	public static int GenRandomNumber() {
-		Random keyGenerator = new Random();
-		return	keyGenerator.nextInt();
-	}
-	public static int getAcessKey() {
-		return newAcessKey;
+	public Boolean getAcess() {
+		return newAcess;
 	}
 
 	
@@ -42,12 +39,15 @@ public class ClientReceiverServer implements Runnable{
 			System.out.println("The Receiver Server is running on the port 4321...");
 			while(true) {
 				Socket newClient = srv.accept();
+				newAcess = false;
 				if(newClient.isConnected())
-					newAcessKey = GenRandomNumber();
+					newAcess = true;
 				setIpClient(newClient.getInetAddress().getCanonicalHostName());
 				Scanner scan = new Scanner(newClient.getInputStream());
 				setMessage(scan.next());
+				
 				System.out.println("ReceiverServer: "+message);
+				
 				}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
