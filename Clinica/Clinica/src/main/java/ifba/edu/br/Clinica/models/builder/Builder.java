@@ -1,6 +1,6 @@
 package ifba.edu.br.Clinica.models.builder;
 
-import ifba.edu.br.Clinica.models.Specialty;
+import ifba.edu.br.Clinica.models.enums.Specialty;
 
 public interface Builder {
 	
