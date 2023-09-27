@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import ifba.edu.br.Clinica.repositories.DoctorRepository;
 import ifba.edu.br.Clinica.dtos.DoctorData;
 import ifba.edu.br.Clinica.dtos.FormDoctor;
-import ifba.edu.br.Clinica.models.factories.CreatorPerson;
-import ifba.edu.br.Clinica.models.products.Doctor;
+import ifba.edu.br.Clinica.factories.CreatorPerson;
+import ifba.edu.br.Clinica.models.Doctor;
 
 @Service
 public class DoctorService {
@@ -22,23 +22,22 @@ public class DoctorService {
 		return lista.stream().map(DoctorData::new).collect(Collectors.toList());
 	}
 	
-	public List<DoctorData> buscarTodos(){
+	public List<DoctorData> listAll(){
 		return  this.converterLista(this.doctorRepository.findAll());
 	}
 	
-	public Doctor cadastrar(FormDoctor data) {
+	public Doctor register(FormDoctor data) {
 		CreatorPerson creator= new CreatorPerson();
 		Doctor doctor = (Doctor) creator.createPerson(data);
 		doctorRepository.save(doctor);
 		return doctor;
 	}
 
-	public List<DoctorData> buscarPorNome(String nome) {
-		
-		return this.converterLista(this.doctorRepository.findByNameContaining(nome));
+	public List<DoctorData> findByName(String name) {
+		return this.converterLista(this.doctorRepository.findByNameContaining(name));
 	}
 
-	public void apagar(Long id) {
+	public void erase(Long id) {
 		// TODO Auto-generated method stub
 		this.doctorRepository.deleteById(id);
 	}

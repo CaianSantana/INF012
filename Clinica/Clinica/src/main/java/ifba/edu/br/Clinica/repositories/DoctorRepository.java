@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import ifba.edu.br.Clinica.models.products.Doctor;
+import ifba.edu.br.Clinica.models.Doctor;
 
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
-	List<Doctor> findByNameContaining(String name);
+	List<Doctor>findByNameContaining(String name);
 }

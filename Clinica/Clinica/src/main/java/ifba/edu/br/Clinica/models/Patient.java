@@ -6,15 +6,13 @@ import ifba.edu.br.Clinica.enums.Specialty;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
-@Entity(name="Doctors")
-public class Doctor implements Person {
+@Entity(name="Patients")
+public class Patient implements Person {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -23,26 +21,25 @@ public class Doctor implements Person {
 	@Nonnull private String email;
 	@ManyToOne(cascade = CascadeType.ALL)
 	@Nonnull private Address address;
-	@Nonnull private String crm;
-	@Enumerated(EnumType.STRING)
-	@Nonnull private Specialty specialty;
 
-	
-	public Doctor() {
+	public Patient() {
 	}
 
 	@Override
 	public Long getId() {
-		return this.id;
+		return id;
+	}
+	@Override
+	public Occupation getOccupation(Occupation occupation) {
+		return Occupation.PATIENT;
 	}
 	@Override
 	public String getName() {
-		return this.name;
+		return name;
 	}
-
 	@Override
 	public String getCPF() {
-		return this.cpf;
+		return cpf;
 	}
 	@Override
 	public String getEmail() {
@@ -50,21 +47,18 @@ public class Doctor implements Person {
 	}
 	@Override
 	public Address getAddress() {
+		// TODO Auto-generated method stub
 		return address;
 	}
 	@Override
 	public String getCRM() {
-		return crm;
-	}
-	
-	@Override
-	public Occupation getOccupation(Occupation occupation) {
-		return Occupation.DOCTOR;
+		return null;
 	}
 	@Override
 	public Specialty getSpecialty() {
-		return this.specialty;
+		return null;
 	}
+
 	@Override
 	public void setName(String name) {
 		this.name = name;
@@ -84,16 +78,14 @@ public class Doctor implements Person {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
+
 	@Override
 	public void setCRM(String crm) {
-		this.crm = crm;
 	}
-	
+
 	@Override
-	public void setSpecialty(Specialty specialty) {
-		this.specialty = specialty;
+	public void setSpecialty(Specialty specialty) {		
 	}
 	
-	
-	
+
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ifba.edu.br.Clinica.dtos.DoctorData;
 import ifba.edu.br.Clinica.dtos.FormDoctor;
-import ifba.edu.br.Clinica.models.products.Doctor;
+import ifba.edu.br.Clinica.models.Doctor;
 import ifba.edu.br.Clinica.service.DoctorService;
 
 
@@ -28,25 +28,25 @@ public class DoctorController {
 	private DoctorService doctorService;
 	
 	@GetMapping
-	public List<DoctorData> listarTodos(){
-		return doctorService.buscarTodos();
+	public List<DoctorData> listAll(){
+		return doctorService.listAll();
 	}
 	
-	@GetMapping("/buscarPorNome")
-	public List<DoctorData> listarPorTitulo(String nome){
-		return doctorService.buscarPorNome(nome);
+	@GetMapping("/findByName")
+	public List<DoctorData> findByName(String name){
+		return doctorService.findByName(name);
 	}
 	
 	@PostMapping
-	public ResponseEntity<DoctorData> cadastrar(@RequestBody FormDoctor dados) {
-		 Doctor doctor=doctorService.cadastrar(dados);
+	public ResponseEntity<DoctorData> register(@RequestBody FormDoctor dados) {
+		 Doctor doctor=doctorService.register(dados);
 		return new ResponseEntity<DoctorData>( new DoctorData(doctor) ,HttpStatus.CREATED);
 	}
 	
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> apagar(@PathVariable Long id) {
-		doctorService.apagar(id);
+	public ResponseEntity<?> erase(@PathVariable Long id) {
+		doctorService.erase(id);
 		return  new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 }

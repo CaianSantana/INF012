@@ -1,6 +1,6 @@
 package ifba.edu.br.Clinica.dtos;
 
-import ifba.edu.br.Clinica.models.products.Address;
+import ifba.edu.br.Clinica.models.Address;
 
 public record AddressData(Long id, String publicPlace, int number, String complement, String neighborhood, String city, String state, String zipCode) {
 
