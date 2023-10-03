@@ -1,0 +1,17 @@
+
+	{
+		"name": "Naaac",
+		"cpf": "06600870575",
+		"email": "nainai@gmail.com",
+		"address":{
+			"public_Place": "Rua 8 de Fevereiro",
+			"number": null,
+			"complement": null,
+			"neighborhood":"Nova Cidade",
+			"city": "Salvador",
+			"state": "BA",
+			"zip_Code": "40313-170"
+		},
+		"crm": "123456",
+		"specialty": "CARDIOLOGIST"
+	}
