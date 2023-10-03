@@ -18,6 +18,7 @@ public interface Person {
 	
 	
 	//Setters
+	public void setId(Long id);
 	public void setName(String name);
 	public void setCPF(String cpf);
 	public void setEmail(String email);

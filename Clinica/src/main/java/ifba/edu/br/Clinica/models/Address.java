@@ -1,6 +1,7 @@
 package ifba.edu.br.Clinica.models;
 
-import ifba.edu.br.Clinica.AbstractProduts.Location;
+
+import ifba.edu.br.Clinica.dtos.FormAddress;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,7 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity(name="Addresses")
-public class Address implements Location{
+public class Address{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id; 
@@ -20,6 +21,28 @@ public class Address implements Location{
 	private String state;
 	private String zipCode;
 	
+	public Address() {};
+	
+	public Address(String publicPlace, int number, String complement, String neighborhood, String city, String state,
+			String zipCode) {
+		super();
+		this.publicPlace = publicPlace;
+		this.number = number;
+		this.complement = complement;
+		this.neighborhood = neighborhood;
+		this.city = city;
+		this.state = state;
+		this.zipCode = zipCode;
+	}
+	public Address(FormAddress data) {
+		this.setPublicPlace(data.publicPlace());
+		this.setNumber(data.number());
+		this.setComplement(data.complement());
+		this.setNeighborhood(data.neighborhood());
+		this.setCity(data.city());
+		this.setState(data.state());
+		this.setZipCode(data.zipCode());
+	}
 	
 	public long getId() {
 		return id;

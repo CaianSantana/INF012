@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ifba.edu.br.Clinica.repositories.DoctorRepository;
 import ifba.edu.br.Clinica.dtos.DoctorData;
 import ifba.edu.br.Clinica.dtos.FormDoctor;
+import ifba.edu.br.Clinica.factories.CreatorDoctor;
 import ifba.edu.br.Clinica.factories.CreatorPerson;
 import ifba.edu.br.Clinica.models.Doctor;
 
@@ -27,7 +28,7 @@ public class DoctorService {
 	}
 	
 	public Doctor register(FormDoctor data) {
-		CreatorPerson creator= new CreatorPerson();
+		CreatorPerson creator= new CreatorDoctor();
 		Doctor doctor = (Doctor) creator.createPerson(data);
 		doctorRepository.save(doctor);
 		return doctor;
@@ -38,8 +39,19 @@ public class DoctorService {
 	}
 
 	public void erase(Long id) {
-		// TODO Auto-generated method stub
 		this.doctorRepository.deleteById(id);
+	}
+
+	public void update(Long id, FormDoctor data) {
+			Doctor doctor = this.doctorRepository.getReferenceById(id);
+			doctor.setId(id);
+			doctor.setName(data.name());
+			doctor.setCPF(data.cpf());
+			doctor.setEmail(data.email());
+			doctor.setAddress(data.address());
+			doctor.setCRM(data.crm());
+			doctor.setSpecialty(data.specialty());
+			this.doctorRepository.save(doctor);
 	}
 
 }

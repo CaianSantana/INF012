@@ -25,40 +25,39 @@ import ifba.edu.br.Clinica.service.PatientService;
 
 
 @RestController
-@RequestMapping("/doctors")
-public class DoctorController {
+@RequestMapping("/patients")
+public class PatientController {
 
 	
 	@Autowired
-	private DoctorService doctorService;
+	private PatientService patientService;
 	
 	@GetMapping
-	public List<DoctorData> listAllDoctors(){
-		return doctorService.listAll();
+	public List<PatientData> listAllPatients(){
+		return patientService.listAll();
 	}
-	
+
 	@GetMapping("/findByName")
-	public List<DoctorData> findDoctorByName(String name){
-		return doctorService.findByName(name);
+	public List<PatientData> findPatientByName(String name){
+		return patientService.findByName(name);
 	}
 
 	@PostMapping
-	public ResponseEntity<DoctorData> registerDoctor(@RequestBody FormDoctor data) {
-		Doctor doctor= doctorService.register(data);
-		return new ResponseEntity<DoctorData>( new DoctorData(doctor) ,HttpStatus.CREATED);
+	public ResponseEntity<PatientData> registerPatient(@RequestBody FormPatient data) {
+		Patient patient= patientService.register(data);
+		return new ResponseEntity<PatientData>( new PatientData(patient) ,HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<DoctorData>updateDoctor(@PathVariable Long id, @RequestBody FormDoctor data) {
-		doctorService.update(id, data);
-		return new ResponseEntity<DoctorData>(HttpStatus.ACCEPTED);
+	public ResponseEntity<PatientData>updateDoctor(@PathVariable Long id, @RequestBody FormPatient data) {
+		patientService.update(id, data);
+		return new ResponseEntity<PatientData>(HttpStatus.ACCEPTED);
 	} 
-
+	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> eraseDoctor(@PathVariable Long id) {
-		doctorService.erase(id);
+	public ResponseEntity<?> erasePatient(@PathVariable Long id) {
+		patientService.erase(id);
 		return  new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
-	
 	
 }

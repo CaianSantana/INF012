@@ -18,14 +18,14 @@ public class Doctor implements Person {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Nonnull private String name;
-	@Nonnull private String cpf;
-	@Nonnull private String email;
+	 private String name;
+	 private String cpf;
+	 private String email;
 	@ManyToOne(cascade = CascadeType.ALL)
-	@Nonnull private Address address;
-	@Nonnull private String crm;
+	 private Address address;
+	 private String crm;
 	@Enumerated(EnumType.STRING)
-	@Nonnull private Specialty specialty;
+	 private Specialty specialty;
 
 	
 	public Doctor() {
@@ -66,6 +66,10 @@ public class Doctor implements Person {
 		return this.specialty;
 	}
 	@Override
+	public void setId(Long id) {
+		this.id=id;
+	}
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -93,6 +97,8 @@ public class Doctor implements Person {
 	public void setSpecialty(Specialty specialty) {
 		this.specialty = specialty;
 	}
+
+	
 	
 	
 	

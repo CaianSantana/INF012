@@ -60,6 +60,10 @@ public class Patient implements Person {
 	}
 
 	@Override
+	public void setId(Long id) {
+		this.id=id;
+	}
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -86,6 +90,8 @@ public class Patient implements Person {
 	@Override
 	public void setSpecialty(Specialty specialty) {		
 	}
+
+	
 	
 
 }
