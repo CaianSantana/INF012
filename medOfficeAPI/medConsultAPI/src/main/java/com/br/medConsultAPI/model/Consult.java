@@ -1,15 +1,16 @@
 package com.br.medConsultAPI.model;
 
+import com.br.medConsultAPI.dtos.FormConsult;
 import com.br.medConsultAPI.exceptions.DoctorAlreadyHaveScheduledAppointmentException;
 
 import com.br.medConsultAPI.exceptions.InactiveException;
 import com.br.medConsultAPI.exceptions.PatientOnlyHaveOneConsultPerDayException;
 
-import dtos.FormConsult;
-import dtos.FormDoctor;
-import dtos.FormPatient;
+import enums.Specialty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,44 +21,51 @@ public class Consult {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private Long doctorID;
+	private Long patientID;
+	@Enumerated(EnumType.STRING)
+	private Specialty specialty;
 	@ManyToOne(cascade = CascadeType.ALL)
-	private FormDoctor doctor;
-	@ManyToOne(cascade = CascadeType.ALL)
-	private FormPatient patient;
-	@ManyToOne(cascade = CascadeType.ALL)
-	private Date date;
+	private Scheduling scheduling;
 
 	
 	
 	public Consult(FormConsult data) {
-		this.doctor = data.doctor();
-		this.patient = data.patient();
-		this.date = data.date();
+		this.doctorID = data.doctorID();
+		this.patientID = data.patientID();
+		this.scheduling = data.scheduling();
 	}
 	public Long getId() {
 		return id;
 	}
-	public FormDoctor getDoctor() {
-		return doctor;
+	public Long getDoctorID() {
+		return doctorID;
 	}
-	public FormPatient getPatient() {
-		return patient;
+	public Long getPatientID() {
+		return patientID;
 	}
-	public Date getDate() {
-		return date;
+	public Scheduling getScheduling() {
+		return scheduling;
 	}
-	public void setDoctor(FormDoctor doctor) {
-		this.doctor = doctor;
+	public Specialty getSpecialty() {
+		return specialty;
 	}
-	public void setPatient(FormPatient patient) {
-		this.patient = patient;
+	public void setDoctor(Long doctorID) {
+		this.doctorID = doctorID;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+	public void setPatient(Long patientID) {
+		this.patientID = patientID;
+	}
+	public void setDate(Scheduling scheduling) {
+		this.scheduling = scheduling;
+	}
+	public void SetSpecialty(Specialty specialty) {
+		this.specialty = specialty;
 	}
 	public void validadeConsult() throws InactiveException, PatientOnlyHaveOneConsultPerDayException, DoctorAlreadyHaveScheduledAppointmentException{
 		
 	}
+	
 		
 		
 

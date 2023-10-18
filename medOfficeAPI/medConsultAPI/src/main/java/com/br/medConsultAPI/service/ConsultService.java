@@ -7,12 +7,12 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import com.br.medConsultAPI.dtos.ConsultData;
+import com.br.medConsultAPI.dtos.FormConsult;
 import com.br.medConsultAPI.model.Consult;
 import com.br.medConsultAPI.repositories.ConsultRepository;
 
-import dtos.ConsultData;
-import dtos.FormConsult;
+
 
 @Service
 public class ConsultService {
@@ -44,9 +44,10 @@ public class ConsultService {
 
 	public void update(Long id, FormConsult data) {
 			Consult consult = this.repository.getReferenceById(id);
-			consult.setDoctor(data.doctor());
-			consult.setPatient(data.patient());
-			consult.setDate(data.date());
+			consult.setDoctor(data.doctorID());
+			consult.setPatient(data.patientID());
+			consult.SetSpecialty(data.specialty());
+			consult.setDate(data.scheduling());
 			this.repository.save(consult);
 	}
 

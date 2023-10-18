@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.br.medConsultAPI.dtos.ConsultData;
+import com.br.medConsultAPI.dtos.FormConsult;
 import com.br.medConsultAPI.model.Consult;
 import com.br.medConsultAPI.service.ConsultService;
 
-import dtos.ConsultData;
-import dtos.FormConsult;
+
 
 @RestController
 @RequestMapping("/Consults")
