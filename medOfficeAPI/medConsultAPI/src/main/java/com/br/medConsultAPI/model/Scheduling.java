@@ -26,6 +26,8 @@ public class Scheduling {
 	private int hourTime;
 	private int minuteTime;
 	
+	public Scheduling() {}
+	
 	public Scheduling(FormScheduling data) {
 		this.dayDate = data.day();
 		this.monthDate = data.month();
@@ -74,8 +76,8 @@ public class Scheduling {
 	public void setMinute(Integer minute) {
 		this.minuteTime = minute;
 	}
-	public void dateValidation(Integer day, Integer month, Integer year) throws InvalidDataException {}
-	public void hourValidation(Integer hour, Integer minute) throws InvalidHourException {}
+	public void dateValidation() throws InvalidDataException {}
+	public void hourValidation() throws InvalidHourException {}
 	
 	@Override
 	public String toString() {

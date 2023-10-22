@@ -2,6 +2,7 @@ package com.br.doctorAPI.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +29,16 @@ public class DoctorService {
 		return lista.stream().map(DoctorData::new).collect(Collectors.toList());
 	}
 	
+	public Boolean verifyStatus(Doctor doctor) {
+		if(doctor.getStatus() == Status.ACTIVE) {
+			return true;
+		}
+		return false;
+	}
 	public List<DoctorData> listAll(){
 		List<Doctor> list = new ArrayList<Doctor>();
 		for (Doctor doctor : this.doctorRepository.findAll()) {
-			if(doctor.getStatus() == Status.ACTIVE) {
+			if(verifyStatus(doctor)) {
 				list.add(doctor);
 			}
 		}
@@ -53,9 +60,22 @@ public class DoctorService {
 	}
 
 	public List<DoctorData> findByName(String name) {
-		return this.converterLista(this.doctorRepository.findByNameContaining(name));
+		List<Doctor> list = new ArrayList<Doctor>();
+		for (Doctor doctor : this.doctorRepository.findByNameContaining(name)) {
+			if(verifyStatus(doctor)) {
+				list.add(doctor);
+			}
+		}
+		return this.converterLista(list);
 	}
-
+	
+	public DoctorData findById(Long id) throws NoSuchElementException{
+		if(!verifyStatus(this.doctorRepository.findById(id).get())) {
+			throw new NoSuchElementException();
+		}
+		return new DoctorData(this.doctorRepository.findById(id).orElseThrow());
+	}
+	
 	public void erase(Long id) {
 		Doctor doctor = this.doctorRepository.getReferenceById(id);
 		doctor.setStatus(Status.INACTIVE);;

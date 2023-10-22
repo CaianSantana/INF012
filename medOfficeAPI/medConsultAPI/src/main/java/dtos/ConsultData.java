@@ -1,12 +1,12 @@
 package dtos;
 
 import com.br.medConsultAPI.model.Consult;
-import com.br.medConsultAPI.model.Date;
+import com.br.medConsultAPI.model.Scheduling;
 
 
-public record ConsultData(Long id, Long IDDoctor, Long IDPatient, Date date) {
+public record ConsultData(Long id, Long IDDoctor, Long IDPatient, Scheduling scheduling) {
 
 	public ConsultData(Consult consult) {
-		this(consult.getId(), consult.getDoctor().id(), consult.getPatient().id(), consult.getDate());
+		this(consult.getId(), consult.getDoctorID(), consult.getPatientID(), consult.getScheduling());
 	}
 }

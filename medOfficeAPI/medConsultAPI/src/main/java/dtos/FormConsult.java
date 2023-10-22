@@ -1,9 +1,7 @@
 package dtos;
 
+import com.br.medConsultAPI.model.Scheduling;
 
-import com.br.medConsultAPI.model.Date;
-
-
-public record FormConsult(Long id, FormDoctor doctor, FormPatient patient, Date date) {
+public record FormConsult(Long id, Long IDdoctor, Long IDpatient, Scheduling scheduling) {
 
 }

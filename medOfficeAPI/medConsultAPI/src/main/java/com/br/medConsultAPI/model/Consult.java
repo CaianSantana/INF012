@@ -6,11 +6,8 @@ import com.br.medConsultAPI.exceptions.DoctorAlreadyHaveScheduledAppointmentExce
 import com.br.medConsultAPI.exceptions.InactiveException;
 import com.br.medConsultAPI.exceptions.PatientOnlyHaveOneConsultPerDayException;
 
-import enums.Specialty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,12 +20,11 @@ public class Consult {
 	private Long id;
 	private Long doctorID;
 	private Long patientID;
-	@Enumerated(EnumType.STRING)
-	private Specialty specialty;
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Scheduling scheduling;
 
-	
+	public Consult() {
+	}
 	
 	public Consult(FormConsult data) {
 		this.doctorID = data.doctorID();
@@ -47,9 +43,6 @@ public class Consult {
 	public Scheduling getScheduling() {
 		return scheduling;
 	}
-	public Specialty getSpecialty() {
-		return specialty;
-	}
 	public void setDoctor(Long doctorID) {
 		this.doctorID = doctorID;
 	}
@@ -59,11 +52,7 @@ public class Consult {
 	public void setDate(Scheduling scheduling) {
 		this.scheduling = scheduling;
 	}
-	public void SetSpecialty(Specialty specialty) {
-		this.specialty = specialty;
-	}
-	public void validadeConsult() throws InactiveException, PatientOnlyHaveOneConsultPerDayException, DoctorAlreadyHaveScheduledAppointmentException{
-		
+	public void validateConsult() throws InactiveException, PatientOnlyHaveOneConsultPerDayException, DoctorAlreadyHaveScheduledAppointmentException{
 	}
 	
 		

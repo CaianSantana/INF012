@@ -1,7 +1,6 @@
 package com.br.doctorAPI.controllers;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,17 +12,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.br.doctorAPI.dtos.DoctorData;
 import com.br.doctorAPI.dtos.FormDoctor;
 import com.br.doctorAPI.models.Doctor;
 import com.br.doctorAPI.service.DoctorService;
-
-
-
-
-
-
 
 
 @RestController
@@ -43,7 +35,12 @@ public class DoctorController {
 	public List<DoctorData> findDoctorByName(String name){
 		return doctorService.findByName(name);
 	}
-
+	@GetMapping("/findById/{id}")
+	public DoctorData findDoctorById(@PathVariable Long id){
+		DoctorData doctor= doctorService.findById(id);
+		return doctor;
+	}
+	
 	@PostMapping
 	public ResponseEntity<DoctorData> registerDoctor(@RequestBody FormDoctor data) throws Exception {
 		Doctor doctor= doctorService.register(data);
