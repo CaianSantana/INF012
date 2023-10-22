@@ -2,11 +2,10 @@ package com.br.patientAPI.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.br.patientAPI.dtos.FormPatient;
 import com.br.patientAPI.dtos.PatientData;
 import com.br.patientAPI.enums.Status;
@@ -14,9 +13,6 @@ import com.br.patientAPI.factories.CreatorPatient;
 import com.br.patientAPI.factories.CreatorPerson;
 import com.br.patientAPI.models.Patient;
 import com.br.patientAPI.repositories.PatientRepository;
-
-
-
 
 
 @Service
@@ -28,11 +24,18 @@ public class PatientService {
 	public List<PatientData> converterLista(List<Patient> lista){
 		return lista.stream().map(PatientData::new).collect(Collectors.toList());
 	}
+	public Boolean verifyStatus(Patient patient) {
+		if(patient.getStatus() == Status.ACTIVE) {
+			return true;
+		}
+		return false;
+	}
+	
 	
 	public List<PatientData> listAll(){
 		List<Patient > list = new ArrayList<Patient >();
 		for (Patient patient : this.patientRepository.findAll()) {
-			if(patient.getStatus() == Status.ACTIVE) {
+			if(verifyStatus(patient)) {
 				list.add(patient);
 			}
 		}
@@ -53,7 +56,20 @@ public class PatientService {
 	}
 
 	public List<PatientData> findByName(String name) {
-		return this.converterLista(this.patientRepository.findByNameContaining(name));
+		List<Patient > list = new ArrayList<Patient >();
+		for (Patient patient : this.patientRepository.findByNameContaining(name)) {
+			if(verifyStatus(patient)) {
+				list.add(patient);
+			}
+		}
+		return this.converterLista(list);
+	}
+	
+	public PatientData findById(Long id){
+		if(!verifyStatus(this.patientRepository.findById(id).get())) {
+			throw new NoSuchElementException();
+		}
+		return new PatientData(this.patientRepository.findById(id).orElseThrow());
 	}
 
 	public void erase(Long id) {
