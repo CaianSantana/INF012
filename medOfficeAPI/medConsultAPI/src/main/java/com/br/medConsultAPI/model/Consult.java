@@ -1,6 +1,7 @@
 package com.br.medConsultAPI.model;
 
 import com.br.medConsultAPI.dtos.FormConsult;
+import com.br.medConsultAPI.enums.Status;
 import com.br.medConsultAPI.exceptions.DoctorAlreadyHaveScheduledAppointmentException;
 
 import com.br.medConsultAPI.exceptions.InactiveException;
@@ -8,6 +9,8 @@ import com.br.medConsultAPI.exceptions.PatientOnlyHaveOneConsultPerDayException;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,14 +25,21 @@ public class Consult {
 	private Long patientID;
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Scheduling scheduling;
-
-	public Consult() {
-	}
+	@Enumerated(EnumType.STRING)
+	private Status status; 
+	private String cancelReason;
 	
+	
+	public Consult() {
+		this.status = status.SCHEDULED;
+		this.cancelReason = null;
+	}
 	public Consult(FormConsult data) {
 		this.doctorID = data.doctorID();
 		this.patientID = data.patientID();
 		this.scheduling = data.scheduling();
+		this.status = status.SCHEDULED;
+		this.cancelReason = null;
 	}
 	public Long getId() {
 		return id;
@@ -43,6 +53,12 @@ public class Consult {
 	public Scheduling getScheduling() {
 		return scheduling;
 	}
+	public Status getStatus() {
+		return status;
+	}
+	public String getCancelReason() {
+		return cancelReason;
+	}
 	public void setDoctor(Long doctorID) {
 		this.doctorID = doctorID;
 	}
@@ -52,6 +68,13 @@ public class Consult {
 	public void setDate(Scheduling scheduling) {
 		this.scheduling = scheduling;
 	}
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+	public void setCancelReason(String cancelReason) {
+		this.cancelReason = cancelReason;
+	}
+	
 	public void validateConsult() throws InactiveException, PatientOnlyHaveOneConsultPerDayException, DoctorAlreadyHaveScheduledAppointmentException{
 	}
 	

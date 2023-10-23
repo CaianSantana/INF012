@@ -16,47 +16,52 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.medConsultAPI.dtos.ConsultData;
 import com.br.medConsultAPI.dtos.FormConsult;
+import com.br.medConsultAPI.exceptions.CancelReasonCannotBeNullException;
+import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultatAtTimeException;
 import com.br.medConsultAPI.exceptions.DoctorNotFoundException;
 import com.br.medConsultAPI.exceptions.InvalidDataException;
 import com.br.medConsultAPI.exceptions.InvalidHourException;
 import com.br.medConsultAPI.exceptions.PatientNotFoundException;
+import com.br.medConsultAPI.exceptions.PatientOnlyHaveOneConsultPerDayException;
 import com.br.medConsultAPI.model.Consult;
 import com.br.medConsultAPI.service.ConsultService;
-
-
 
 @RestController
 @RequestMapping("/Consults")
 public class ConsultController {
-
 	@Autowired
 	private ConsultService service;
-	
 	@GetMapping
 	public List<ConsultData> listAllConsults(){
 		return service.listAll();
 	}
 	@PostMapping
 	public ResponseEntity<ConsultData> scheduleConsult(@RequestBody FormConsult data){
+		Consult consult;
 		try {
-			Consult consult = service.register(data);
-			return new ResponseEntity<ConsultData>(new ConsultData(consult), HttpStatus.CREATED);
+			consult = service.register(data);
 		} catch (DoctorNotFoundException | PatientNotFoundException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		} catch (InvalidDataException | InvalidHourException e) {
+		} catch (InvalidDataException 
+				| InvalidHourException 
+				| PatientOnlyHaveOneConsultPerDayException 
+				| DoctorCannotHaveMoreThanOneConsultatAtTimeException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
-		
+		return new ResponseEntity<ConsultData>(new ConsultData(consult), HttpStatus.CREATED);
 	}
 	@PutMapping("/{id}")
-	public ResponseEntity<ConsultData> updateConsult(@PathVariable Long id,@RequestBody FormConsult data) throws Exception{
+	public ResponseEntity<ConsultData> updateConsult(@PathVariable Long id, @RequestBody FormConsult data) throws Exception{
 		service.update(id,data);
 		return new ResponseEntity<ConsultData>(HttpStatus.ACCEPTED);
 	}
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteConsult(@PathVariable Long id){
-		service.erase(id);
+	@DeleteMapping("/cancel")
+	public ResponseEntity<?> cancelConsult(@RequestBody Long id, @RequestBody String cancelReason){
+		try {
+			service.cancel(id, cancelReason);
+		} catch (CancelReasonCannotBeNullException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+		}
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
-	
 }

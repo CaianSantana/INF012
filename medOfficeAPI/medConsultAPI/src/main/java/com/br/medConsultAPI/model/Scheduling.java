@@ -78,6 +78,19 @@ public class Scheduling {
 	}
 	public void dateValidation() throws InvalidDataException {}
 	public void hourValidation() throws InvalidHourException {}
+	public boolean compareDate(Scheduling scheduling) {
+		if(this.monthDate == scheduling.getMonth()
+				&&this.dayDate == scheduling.getDayDate()
+				&&this.yearDate == scheduling.getYear())
+			return true;
+		return false;
+	}
+	public boolean compareHour(Scheduling scheduling) {
+		if(this.hourTime == scheduling.getHour()
+				&&this.minuteTime == scheduling.getMinute())
+			return true;
+		return false;
+	}
 	
 	@Override
 	public String toString() {
