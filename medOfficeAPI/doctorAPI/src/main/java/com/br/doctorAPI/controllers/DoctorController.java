@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.br.doctorAPI.dtos.DoctorData;
 import com.br.doctorAPI.dtos.FormDoctor;
+import com.br.doctorAPI.exception.NullValuesException;
 import com.br.doctorAPI.models.Doctor;
 import com.br.doctorAPI.service.DoctorService;
 
@@ -26,7 +27,7 @@ public class DoctorController {
 	@Autowired
 	private DoctorService doctorService;
 	
-	@GetMapping
+	@GetMapping("/findAll")
 	public List<DoctorData> listAllDoctors(){
 		return doctorService.listAll();
 	}
@@ -42,14 +43,23 @@ public class DoctorController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<DoctorData> registerDoctor(@RequestBody FormDoctor data) throws Exception {
-		Doctor doctor= doctorService.register(data);
-		return new ResponseEntity<DoctorData>( new DoctorData(doctor) ,HttpStatus.CREATED);
+	public ResponseEntity<DoctorData> registerDoctor(@RequestBody FormDoctor data) {
+		Doctor doctor;
+		try {
+			doctor = doctorService.register(data);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+		}
+		return new ResponseEntity<DoctorData>(new DoctorData(doctor), HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<DoctorData>updateDoctor(@PathVariable Long id, @RequestBody FormDoctor data) {
-		doctorService.update(id, data);
+		try {
+			doctorService.update(id, data);
+		} catch (NullValuesException e) {
+			return new ResponseEntity<DoctorData>(HttpStatus.NOT_ACCEPTABLE);
+		}
 		return new ResponseEntity<DoctorData>(HttpStatus.ACCEPTED);
 	} 
 

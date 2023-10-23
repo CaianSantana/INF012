@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.br.doctorAPI.dtos.DoctorData;
 import com.br.doctorAPI.dtos.FormDoctor;
 import com.br.doctorAPI.enums.Status;
+import com.br.doctorAPI.exception.NullValuesException;
 import com.br.doctorAPI.factories.CreatorDoctor;
 import com.br.doctorAPI.factories.CreatorPerson;
 import com.br.doctorAPI.models.Doctor;
@@ -82,8 +83,10 @@ public class DoctorService {
 		this.doctorRepository.save(doctor);
 	}
 
-	public void update(Long id, FormDoctor data) {
+	public void update(Long id, FormDoctor data) throws NullValuesException {
 			Doctor doctor = this.doctorRepository.getReferenceById(id);
+			if(doctor.hasNull())
+				throw new NullValuesException();
 			doctor.setName(data.name());
 			doctor.setCPF(data.cpf());
 			doctor.setEmail(data.email());

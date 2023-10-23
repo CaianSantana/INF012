@@ -20,7 +20,7 @@ import jakarta.persistence.ManyToOne;
 
 
 @Entity(name="Doctors")
-public class Doctor implements Person {
+public class Doctor implements Person, HasNull {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -107,5 +107,18 @@ public class Doctor implements Person {
 	}				
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+
+	@Override
+	public boolean hasNull() {
+		if(this.getName().isBlank()
+				||this.getCPF().isBlank()
+				||this.getEmail().isBlank()
+				||this.getCRM().isBlank()
+				||this.getSpecialty().equals(null)
+				||this.getAddress().hasNull())
+			return true;
+		return false;
 	}
 }

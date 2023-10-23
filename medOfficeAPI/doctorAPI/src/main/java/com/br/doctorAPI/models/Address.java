@@ -13,7 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity(name="Addresses")
-public class Address{
+public class Address implements HasNull{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id; 
@@ -56,7 +56,7 @@ public class Address{
 	public String getPublicPlace() {
 		return publicPlace;
 	}
-	public int getNumber() {
+	public Integer getNumber() {
 		return number;
 	}
 	public String getComplement() {
@@ -104,6 +104,16 @@ public class Address{
 				this.getZipCode() == null) {
 			return true;
 		}
+		return false;
+	}
+	public boolean hasNull() {
+		if(this.getCity().isBlank()
+				||this.getNeighborhood().isBlank()
+				||this.getNumber().equals(null)
+				||this.getPublicPlace().isBlank()
+				||this.getState().isBlank()
+				||this.getZipCode().isBlank())
+			return true;
 		return false;
 	}
 	
