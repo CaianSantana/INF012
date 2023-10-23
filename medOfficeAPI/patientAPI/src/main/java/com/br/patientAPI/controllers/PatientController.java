@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.br.patientAPI.dtos.FormPatient;
 import com.br.patientAPI.dtos.PatientData;
+import com.br.patientAPI.exceptions.NullValueException;
 import com.br.patientAPI.models.Patient;
 import com.br.patientAPI.service.PatientService;
 
@@ -42,8 +43,13 @@ public class PatientController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<PatientData> registerPatient(@RequestBody FormPatient data) throws Exception {
-		Patient patient= patientService.register(data);
+	public ResponseEntity<PatientData> registerPatient(@RequestBody FormPatient data){
+		Patient patient;
+		try {
+			patient = patientService.register(data);
+		} catch (NullValueException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+		}
 		return new ResponseEntity<PatientData>( new PatientData(patient) ,HttpStatus.CREATED);
 	}
 	

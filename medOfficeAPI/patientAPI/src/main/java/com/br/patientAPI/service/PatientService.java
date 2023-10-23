@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.br.patientAPI.dtos.FormPatient;
 import com.br.patientAPI.dtos.PatientData;
 import com.br.patientAPI.enums.Status;
+import com.br.patientAPI.exceptions.NullValueException;
 import com.br.patientAPI.factories.CreatorPatient;
 import com.br.patientAPI.factories.CreatorPerson;
 import com.br.patientAPI.models.Patient;
@@ -42,14 +43,11 @@ public class PatientService {
 		return  this.converterLista(list);
 	}
 	
-	public Patient register(FormPatient data) throws Exception {
+	public Patient register(FormPatient data) throws NullValueException {
 		CreatorPerson creator= new CreatorPatient();
 		Patient patient = (Patient) creator.createPerson(data);
-		if(patient.getName() == null||
-				patient.getCPF() == null||
-				patient.getEmail() == null ||
-				patient.getPhone() == null) {
-			throw new Exception();
+		if(patient.hasNull()) {
+			throw new NullValueException();
 		}
 		patientRepository.save(patient);
 		return patient;

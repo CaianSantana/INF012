@@ -14,7 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
 @Entity(name="Patients")
-public class Patient implements Person {
+public class Patient implements Person, HasNull {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -74,10 +74,19 @@ public class Patient implements Person {
 		this.address = address;
 	}
 	@Override
-	public void setPhone(String Phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;		
 	}
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+	@Override
+	public boolean hasNull() {
+		if(this.getName().isBlank()
+				||this.getCPF().isBlank()
+				||this.getEmail().isBlank()
+				||this.getAddress().hasNull())
+			return true;
+		return false;
 	}
 }
