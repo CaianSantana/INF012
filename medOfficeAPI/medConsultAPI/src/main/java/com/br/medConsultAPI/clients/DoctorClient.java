@@ -16,5 +16,5 @@ public interface DoctorClient {
 	public ResponseEntity<DoctorData> findDoctorById(@PathVariable("id") Long id);
 	
 	@RequestMapping(method = RequestMethod.GET, value = "doctors/findAll")
-	public ResponseEntity<List<DoctorData>> findAllDoctors();
+	public List<DoctorData> findAllDoctors();
 }

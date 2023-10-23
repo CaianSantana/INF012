@@ -1,6 +1,8 @@
 package com.br.medConsultAPI.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -20,6 +22,7 @@ import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultatAtTim
 import com.br.medConsultAPI.exceptions.DoctorNotFoundException;
 import com.br.medConsultAPI.exceptions.InvalidDataException;
 import com.br.medConsultAPI.exceptions.InvalidHourException;
+import com.br.medConsultAPI.exceptions.NoDoctorAvailableException;
 import com.br.medConsultAPI.exceptions.PatientNotFoundException;
 import com.br.medConsultAPI.exceptions.PatientOnlyHaveOneConsultPerDayException;
 import com.br.medConsultAPI.model.Consult;
@@ -39,14 +42,22 @@ public class ConsultService {
 			return true;
 		return false;
 	}
-	private Long getRandomDoctor() {
-		List<DoctorData> docList = (List<DoctorData>) doctorClient.findAllDoctors();
-		Long ranDocID;
-		for(int i = 0; i<docList.size();i++) {
-			//	
+	private Long getRandomDoctor(Consult consult) throws NoDoctorAvailableException {
+		List<DoctorData> docList = doctorClient.findAllDoctors();
+		Collections.shuffle(docList);
+		for(int i=0; i<docList.size(); i++) {
+			for(Consult item: this.repository.findAll()) {
+				if(item.getDoctorID() == docList.get(i).id()
+						&&!item.getScheduling().compareDate(consult.getScheduling())
+						&&!item.getScheduling().compareHour(consult.getScheduling())) {
+						return docList.get(i).id();
+					}
 			}
-		return null;
+		}
+		throw new NoDoctorAvailableException();
 	}
+	
+	
 	
 	public List<ConsultData> converterLista(List<Consult> lista){
 		return lista.stream().map(ConsultData::new).collect(Collectors.toList());
@@ -56,15 +67,15 @@ public class ConsultService {
 		list.addAll(repository.findAll());
 		return this.converterLista(list);
 	}
-	public Consult register(FormConsult data) throws DoctorNotFoundException, PatientNotFoundException, InvalidDataException, InvalidHourException, PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultatAtTimeException {
+	public Consult register(FormConsult data) throws DoctorNotFoundException, PatientNotFoundException, InvalidDataException, InvalidHourException, 
+	PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultatAtTimeException, NoDoctorAvailableException {
 		Consult consult = new Consult(data);
 		data.scheduling().dateValidation();
 		data.scheduling().hourValidation();
 		if(objectIsNull(doctorClient.findDoctorById(data.doctorID()))) {
-			consult.setDoctor(getRandomDoctor());
+			consult.setDoctor(getRandomDoctor(consult));
 			throw new DoctorNotFoundException();
 		}
-			
 		if(objectIsNull(patientClient.findPatientById(data.patientID())))	
 			throw new PatientNotFoundException();
 		for(Consult item: this.repository.findAll()) {

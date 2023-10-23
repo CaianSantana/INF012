@@ -21,6 +21,7 @@ import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultatAtTim
 import com.br.medConsultAPI.exceptions.DoctorNotFoundException;
 import com.br.medConsultAPI.exceptions.InvalidDataException;
 import com.br.medConsultAPI.exceptions.InvalidHourException;
+import com.br.medConsultAPI.exceptions.NoDoctorAvailableException;
 import com.br.medConsultAPI.exceptions.PatientNotFoundException;
 import com.br.medConsultAPI.exceptions.PatientOnlyHaveOneConsultPerDayException;
 import com.br.medConsultAPI.model.Consult;
@@ -45,7 +46,8 @@ public class ConsultController {
 		} catch (InvalidDataException 
 				| InvalidHourException 
 				| PatientOnlyHaveOneConsultPerDayException 
-				| DoctorCannotHaveMoreThanOneConsultatAtTimeException e) {
+				| DoctorCannotHaveMoreThanOneConsultatAtTimeException
+				| NoDoctorAvailableException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		return new ResponseEntity<ConsultData>(new ConsultData(consult), HttpStatus.CREATED);
