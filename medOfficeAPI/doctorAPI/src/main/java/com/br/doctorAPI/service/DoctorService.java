@@ -12,8 +12,6 @@ import com.br.doctorAPI.dtos.DoctorData;
 import com.br.doctorAPI.dtos.FormDoctor;
 import com.br.doctorAPI.enums.Status;
 import com.br.doctorAPI.exception.NullValuesException;
-import com.br.doctorAPI.factories.CreatorDoctor;
-import com.br.doctorAPI.factories.CreatorPerson;
 import com.br.doctorAPI.models.Doctor;
 import com.br.doctorAPI.repositories.DoctorRepository;
 
@@ -46,16 +44,10 @@ public class DoctorService {
 		return this.converterLista(list);
 	}
 	
-	public Doctor register(FormDoctor data) throws Exception {
-		
-		CreatorPerson creator= new CreatorDoctor();
-		Doctor doctor = (Doctor) creator.createPerson(data);
-		if(doctor.getName() == null||
-				doctor.getCPF() == null||
-				doctor.getEmail() == null ||
-				doctor.getPhone() == null) {
-			throw new Exception();
-		}
+	public Doctor register(FormDoctor data) throws NullValuesException {
+		Doctor doctor = new Doctor(data);
+		if(doctor.hasNull())
+			throw new NullValuesException();
 		doctorRepository.save(doctor);
 		return doctor;
 	}
@@ -63,9 +55,8 @@ public class DoctorService {
 	public List<DoctorData> findByName(String name) {
 		List<Doctor> list = new ArrayList<Doctor>();
 		for (Doctor doctor : this.doctorRepository.findByNameContaining(name)) {
-			if(verifyStatus(doctor)) {
+			if(verifyStatus(doctor))
 				list.add(doctor);
-			}
 		}
 		return this.converterLista(list);
 	}

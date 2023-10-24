@@ -1,14 +1,8 @@
 package com.br.doctorAPI.models;
 
-
-
-
-
-
-import com.br.doctorAPI.AbstractProduts.Person;
+import com.br.doctorAPI.dtos.FormDoctor;
 import com.br.doctorAPI.enums.Specialty;
 import com.br.doctorAPI.enums.Status;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,7 +14,7 @@ import jakarta.persistence.ManyToOne;
 
 
 @Entity(name="Doctors")
-public class Doctor implements Person, HasNull {
+public class Doctor implements HasNull {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -39,29 +33,33 @@ public class Doctor implements Person, HasNull {
 
 	public Doctor() {
 	}
+	public Doctor(FormDoctor data){
+		this.name = data.name();
+		this.cpf = data.cpf();
+		this.email = data.email();
+		this.phone = data.phone();
+		this.address = data.address();
+		this.crm = data.crm();
+		this.specialty = data.specialty();
+		this.status = Status.ACTIVE;
+	}
 
-	@Override
+	
 	public Long getId() {
 		return this.id;
 	}
-	@Override
 	public String getName() {
 		return this.name;
 	}
-
-	@Override
 	public String getCPF() {
 		return this.cpf;
 	}
-	@Override
 	public String getEmail() {
 		return email;
 	}
-	@Override
 	public String getPhone() {
 		return phone;
 	}
-	@Override
 	public Address getAddress() {
 		return address;
 	}
@@ -74,34 +72,26 @@ public class Doctor implements Person, HasNull {
 	public Status getStatus() {
 		return status;
 	}
-
-	@Override
+	
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	@Override
 	public void setCPF(String cpf) {
 		this.cpf = cpf;
 	}
-	@Override
 	public void setEmail(String email) {
 		this.email = email;
 		
 	}
-	@Override
 	public void setAddress(Address address) {
 		this.address = address;
 	}
 	public void setCRM(String crm) {
 		this.crm = crm;
 	}
-	
 	public void setSpecialty(Specialty specialty) {
 		this.specialty = specialty;
 	}
-
-	@Override
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}				
@@ -110,7 +100,7 @@ public class Doctor implements Person, HasNull {
 	}
 
 
-	@Override
+	
 	public boolean hasNull() {
 		if(this.getName().isBlank()
 				||this.getCPF().isBlank()
