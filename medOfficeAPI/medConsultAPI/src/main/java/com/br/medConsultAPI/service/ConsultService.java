@@ -24,6 +24,7 @@ import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultatAtTim
 import com.br.medConsultAPI.exceptions.DoctorNotFoundException;
 import com.br.medConsultAPI.exceptions.InvalidDataException;
 import com.br.medConsultAPI.exceptions.InvalidHourException;
+import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
 import com.br.medConsultAPI.exceptions.NoDoctorAvailableException;
 import com.br.medConsultAPI.exceptions.PatientNotFoundException;
 import com.br.medConsultAPI.exceptions.PatientOnlyHaveOneConsultPerDayException;
@@ -70,7 +71,7 @@ public class ConsultService {
 			for(Consult item: this.consultRepository.findAll()) {
 				if(item.getDoctorID() == docList.get(i).id()
 						&&!item.getScheduling().compareDate(consult.getScheduling())
-						&&!item.getScheduling().compareHour(consult.getScheduling())) {
+						&&!item.getScheduling().compareTime(consult.getScheduling())) {
 						return docList.get(i).id();
 					}
 			}
@@ -123,10 +124,11 @@ public class ConsultService {
     }
 
 	public Consult register(FormConsult data) throws DoctorNotFoundException, PatientNotFoundException, InvalidDataException, InvalidHourException, 
-	PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultatAtTimeException, NoDoctorAvailableException {
+	PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultatAtTimeException, NoDoctorAvailableException, InvalidSchedulingException {
 		Consult consult = new Consult(data);
 		data.scheduling().dateValidation();
 		data.scheduling().hourValidation();
+		data.scheduling().consultTimeValidation();
 		if(isNull(this.findDoctorById(data.doctorID()))) {
 			consult.setDoctor(getRandomDoctor(consult));
 			throw new DoctorNotFoundException();
@@ -140,10 +142,10 @@ public class ConsultService {
 			}
 			if(item.getDoctorID() == consult.getDoctorID()
 					&&item.getScheduling().compareDate(consult.getScheduling())
-					&&item.getScheduling().compareHour(consult.getScheduling())) {
+					&&item.getScheduling().compareTime(consult.getScheduling())) {
 				throw new DoctorCannotHaveMoreThanOneConsultatAtTimeException();
 			}
-		}
+			}
 		this.consultRepository.save(consult);
 		return consult;
 	}

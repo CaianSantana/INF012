@@ -9,13 +9,19 @@ import com.br.medConsultAPI.dtos.FormScheduling;
 import com.br.medConsultAPI.enums.DayOfWeek;
 import com.br.medConsultAPI.exceptions.InvalidDataException;
 import com.br.medConsultAPI.exceptions.InvalidHourException;
+import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity(name="Schedulings")
 public class Scheduling {
 	@Id
@@ -28,8 +34,12 @@ public class Scheduling {
 	private DayOfWeek dayOfWeek;
 	private int hourTime;
 	private int minuteTime;
+	private final int DURATION = 1;
+	private int hourFinal;
 	
-	public Scheduling() {}
+	public Scheduling() {
+		hourFinal = this.hourTime+DURATION;
+	}
 	
 	public Scheduling(FormScheduling data) {
 		this.dayDate = data.day();
@@ -37,52 +47,16 @@ public class Scheduling {
 		this.yearDate = data.year();
 		this.dayOfWeek = data.dayOfWeek();
 		this.hourTime = data.hour();
+		this.hourFinal = this.hourTime+DURATION;
 		this.minuteTime = data.minute();
 	}
 	
-	public Long getID() {
-		return id;
-	}
-	public Integer getDayDate() {
-		return dayDate;
-	}
-	public Integer getMonth() {
-		return monthDate;
-	}
-	public Integer getYear() {
-		return yearDate;
-	}
-	public DayOfWeek getDayOfWeek() {
-		return dayOfWeek;
-	}
-	public Integer getHour() {
-		return hourTime;
-	}
-	public Integer getMinute() {
-		return minuteTime;
-	}
-	public void setDayDate(Integer dayDate) {
-		this.dayDate = dayDate;
-	}
-	public void setMonth(Integer month) {
-		this.monthDate = month;
-	}
-	public void setYear(Integer year) {
-		this.yearDate = year;
-	}
-	public void setDayOfWeek(DayOfWeek dayOfWeek) {
-		this.dayOfWeek = dayOfWeek;
-	}
-	public void setHour(Integer hour) {
-		this.hourTime = hour;
-	}
-	public void setMinute(Integer minute) {
-		this.minuteTime = minute;
-	}
 	public void dateValidation() throws InvalidDataException {
 		Date date = new Date();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
+		int nextYear = calendar.get(Calendar.YEAR);
+		nextYear++;
 		Map<Integer, String> monthWith30Days = new HashMap<>();
 		monthWith30Days.put(4, "April");
 		monthWith30Days.put(6, "June");
@@ -96,25 +70,37 @@ public class Scheduling {
 		monthWith31Days.put(8, "August");
 		monthWith31Days.put(10, "October");
 		monthWith31Days.put(12, "December");
-		if(this.yearDate<1900 || this.yearDate>calendar.get(Calendar.YEAR)+1){
+
+		if(this.yearDate>=calendar.get(Calendar.YEAR) || this.yearDate<nextYear){
 			if(monthWith30Days.containsKey(this.monthDate)){
-				if(this.dayDate<1 || this.dayDate>30)
+				if(this.dayDate<1 || this.dayDate>30){
+					System.out.println("30");
 					throw new InvalidDataException();
+				}
 				return;
 			}	
 			else if(monthWith31Days.containsKey(this.monthDate)){
-				if(this.dayDate<1 || this.dayDate>31)
+				if(this.dayDate<1 || this.dayDate>31){
+					System.out.println("31");
 					throw new InvalidDataException();
+				}
 				return;
 			}	
 			else if(monthDate == 2){
-				if((this.dayDate<1 || this.dayDate>28))
-					if(!(this.dayDate == 29 && Year.isLeap(this.yearDate)))
-						throw new InvalidDataException();
-				return;
+				if((this.dayDate<1 || this.dayDate>28)){
+					if(!(this.dayDate == 29 && Year.isLeap(this.yearDate))){
+					System.out.println("29");
+					throw new InvalidDataException();
+					}
+					System.out.println("28");
+					return;
+				}
 			}
-			else
+			else{
+				System.out.println("ano "+ nextYear);
 				throw new InvalidDataException();	
+			}
+				
 		}
 	}
 	public void hourValidation() throws InvalidHourException {
@@ -122,16 +108,20 @@ public class Scheduling {
 			||(this.minuteTime<0 || this.minuteTime>59))
 			throw new InvalidHourException();
 	}
+	public void consultTimeValidation() throws InvalidSchedulingException{
+		if(this.hourTime<7 || this.hourTime>16)
+			throw new InvalidSchedulingException();
+	}
 	public boolean compareDate(Scheduling scheduling) {
-		if(this.monthDate == scheduling.getMonth()
+		if(this.monthDate == scheduling.getMonthDate()
 				&&this.dayDate == scheduling.getDayDate()
-				&&this.yearDate == scheduling.getYear())
+				&&this.yearDate == scheduling.getYearDate())
 			return true;
 		return false;
 	}
-	public boolean compareHour(Scheduling scheduling) {
-		if(this.hourTime == scheduling.getHour()
-				&&this.minuteTime == scheduling.getMinute())
+	public boolean compareTime(Scheduling scheduling) {
+		if(scheduling.getHourTime() == this.hourTime
+			|| (scheduling.getHourTime() == this.hourFinal && scheduling.getMinuteTime()<this.minuteTime))
 			return true;
 		return false;
 	}
