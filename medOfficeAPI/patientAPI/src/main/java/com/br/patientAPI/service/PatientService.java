@@ -10,6 +10,7 @@ import com.br.patientAPI.dtos.FormPatient;
 import com.br.patientAPI.dtos.PatientData;
 import com.br.patientAPI.enums.Status;
 import com.br.patientAPI.exceptions.NullValueException;
+import com.br.patientAPI.exceptions.OperationNotAllowedException;
 import com.br.patientAPI.models.Patient;
 import com.br.patientAPI.repositories.PatientRepository;
 
@@ -72,12 +73,16 @@ public class PatientService {
 		this.patientRepository.save(patient);
 	}
 
-	public void update(Long id, FormPatient data) throws NullValueException {
+	public void update(Long id, FormPatient data) throws NullValueException, OperationNotAllowedException {
 		Patient patient = this.patientRepository.getReferenceById(id);
 		patient.setName(data.name());
-		patient.setCpf(data.cpf());
-		patient.setEmail(data.email());
 		patient.setAddress(data.address());
+		if(data.cpf()!=null
+		&&data.email()!=null){
+			if(!data.email().equals(patient.getEmail())
+			||!data.cpf().equals(patient.getCpf()))
+				throw new OperationNotAllowedException();
+		}
 		if(patient.hasNull())
 			throw new NullValueException();
 		this.patientRepository.save(patient);

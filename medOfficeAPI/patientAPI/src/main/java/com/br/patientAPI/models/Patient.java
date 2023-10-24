@@ -42,9 +42,9 @@ public class Patient implements HasNull {
 
 	@Override
 	public boolean hasNull() {
-		if(this.getName().isBlank()
-				||this.getCpf().isBlank()
-				||this.getEmail().isBlank()
+		if(this.getName()== null
+				||this.getCpf()== null
+				||this.getEmail()== null
 				||this.getAddress().hasNull())
 			return true;
 		return false;
