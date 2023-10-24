@@ -71,7 +71,7 @@ public class Scheduling {
 		monthWith31Days.put(10, "October");
 		monthWith31Days.put(12, "December");
 
-		if(this.yearDate>=calendar.get(Calendar.YEAR) || this.yearDate<nextYear){
+		if(this.yearDate==calendar.get(Calendar.YEAR) || this.yearDate==nextYear){
 			if(monthWith30Days.containsKey(this.monthDate)){
 				if(this.dayDate<1 || this.dayDate>30){
 					System.out.println("30");
