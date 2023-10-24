@@ -22,7 +22,6 @@ public class Doctor implements HasNull {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	private String cpf;
 	private String email;
 	private String phone;
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -37,7 +36,6 @@ public class Doctor implements HasNull {
 	}
 	public Doctor(FormDoctor data){
 		this.name = data.name();
-		this.cpf = data.cpf();
 		this.email = data.email();
 		this.phone = data.phone();
 		this.address = data.address();
@@ -47,11 +45,10 @@ public class Doctor implements HasNull {
 	}
 
 	public boolean hasNull() {
-		if(this.getName().isBlank()
-				||this.getCpf().isBlank()
-				||this.getEmail().isBlank()
-				||this.getCrm().isBlank()
-				||this.getSpecialty().equals(null)
+		if(this.getName() == null
+				||this.getEmail()== null
+				||this.getCrm()== null
+				||this.getSpecialty()== null
 				||this.getAddress().hasNull())
 			return true;
 		return false;

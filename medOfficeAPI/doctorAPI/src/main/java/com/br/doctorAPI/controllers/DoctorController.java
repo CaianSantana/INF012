@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.br.doctorAPI.dtos.DoctorData;
 import com.br.doctorAPI.dtos.FormDoctor;
 import com.br.doctorAPI.exception.NullValuesException;
+import com.br.doctorAPI.exception.OperationNotAllowedException;
 import com.br.doctorAPI.models.Doctor;
 import com.br.doctorAPI.service.DoctorService;
 
@@ -57,8 +58,9 @@ public class DoctorController {
 	public ResponseEntity<DoctorData>updateDoctor(@PathVariable Long id, @RequestBody FormDoctor data) {
 		try {
 			doctorService.update(id, data);
-		} catch (NullValuesException e) {
-			return new ResponseEntity<DoctorData>(HttpStatus.NOT_ACCEPTABLE);
+		} catch (NullValuesException | OperationNotAllowedException e) {
+			System.err.println(e);
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		return new ResponseEntity<DoctorData>(HttpStatus.ACCEPTED);
 	} 

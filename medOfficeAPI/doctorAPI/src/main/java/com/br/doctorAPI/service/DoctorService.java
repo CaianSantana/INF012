@@ -10,6 +10,7 @@ import com.br.doctorAPI.dtos.DoctorData;
 import com.br.doctorAPI.dtos.FormDoctor;
 import com.br.doctorAPI.enums.Status;
 import com.br.doctorAPI.exception.NullValuesException;
+import com.br.doctorAPI.exception.OperationNotAllowedException;
 import com.br.doctorAPI.models.Doctor;
 import com.br.doctorAPI.repositories.DoctorRepository;
 
@@ -69,14 +70,19 @@ public class DoctorService {
 		this.doctorRepository.save(doctor);
 	}
 
-	public void update(Long id, FormDoctor data) throws NullValuesException {
+	public void update(Long id, FormDoctor data) throws NullValuesException, OperationNotAllowedException {
 			Doctor doctor = this.doctorRepository.getReferenceById(id);
 			doctor.setName(data.name());
-			doctor.setCpf(data.cpf());
-			doctor.setEmail(data.email());
 			doctor.setAddress(data.address());
-			doctor.setCrm(data.crm());
-			doctor.setSpecialty(data.specialty());
+			doctor.setPhone(data.phone());
+			if(data.email() != null
+			&&data.crm() != null
+			&&data.specialty() != null){
+				if(!data.email().equals(doctor.getEmail())
+				||(data.crm().equals(doctor.getCrm())
+				||data.specialty() != doctor.getSpecialty()))
+				throw new OperationNotAllowedException();
+			}
 			if(doctor.hasNull())
 				throw new NullValuesException();
 			this.doctorRepository.save(doctor);
