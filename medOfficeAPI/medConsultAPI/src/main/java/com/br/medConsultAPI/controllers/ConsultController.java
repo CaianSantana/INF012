@@ -63,6 +63,7 @@ public class ConsultController {
 		try {
 			service.cancel(id, cancelReason);
 		} catch (CancelReasonCannotBeNullException e) {
+			System.err.println(e);
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
