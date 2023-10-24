@@ -34,7 +34,7 @@ public class ConsultController {
 	private ConsultService service;
 	@GetMapping
 	public List<ConsultData> listAllConsults(){
-		return service.listAll();
+		return service.listAllConsults();
 	}
 	@PostMapping
 	public ResponseEntity<ConsultData> scheduleConsult(@RequestBody FormConsult data){
