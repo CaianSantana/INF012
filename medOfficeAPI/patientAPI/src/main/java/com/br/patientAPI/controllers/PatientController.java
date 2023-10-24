@@ -26,7 +26,7 @@ public class PatientController {
 	@Autowired
 	private PatientService patientService;
 	
-	@GetMapping
+	@GetMapping("/findAll")
 	public List<PatientData> listAllPatients(){
 		return patientService.listAll();
 	}

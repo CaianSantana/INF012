@@ -71,14 +71,14 @@ public class DoctorService {
 
 	public void update(Long id, FormDoctor data) throws NullValuesException {
 			Doctor doctor = this.doctorRepository.getReferenceById(id);
-			if(doctor.hasNull())
-				throw new NullValuesException();
 			doctor.setName(data.name());
-			doctor.setCPF(data.cpf());
+			doctor.setCpf(data.cpf());
 			doctor.setEmail(data.email());
 			doctor.setAddress(data.address());
-			doctor.setCRM(data.crm());
+			doctor.setCrm(data.crm());
 			doctor.setSpecialty(data.specialty());
+			if(doctor.hasNull())
+				throw new NullValuesException();
 			this.doctorRepository.save(doctor);
 	}
 

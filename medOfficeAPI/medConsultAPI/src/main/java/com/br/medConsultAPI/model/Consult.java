@@ -31,14 +31,14 @@ public class Consult {
 	
 	
 	public Consult() {
-		this.status = status.SCHEDULED;
+		this.status = Status.SCHEDULED;
 		this.cancelReason = null;
 	}
 	public Consult(FormConsult data) {
 		this.doctorID = data.doctorID();
 		this.patientID = data.patientID();
 		this.scheduling = data.scheduling();
-		this.status = status.SCHEDULED;
+		this.status = Status.SCHEDULED;
 		this.cancelReason = null;
 	}
 	public Long getId() {

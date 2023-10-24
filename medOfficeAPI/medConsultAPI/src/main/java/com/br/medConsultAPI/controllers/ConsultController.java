@@ -48,6 +48,7 @@ public class ConsultController {
 				| PatientOnlyHaveOneConsultPerDayException 
 				| DoctorCannotHaveMoreThanOneConsultatAtTimeException
 				| NoDoctorAvailableException e) {
+			System.err.println(e);
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		return new ResponseEntity<ConsultData>(new ConsultData(consult), HttpStatus.CREATED);
