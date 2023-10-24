@@ -96,23 +96,13 @@ public class Address implements HasNull{
 		this.zipCode = zipCode;
 	}
 
-	public boolean findNull() {
-		if(this.getPublicPlace() == null||
-				this.getNeighborhood() == null||
-				this.getCity() == null ||
-				this.getState() == null ||
-				this.getZipCode() == null) {
-			return true;
-		}
-		return false;
-	}
 	public boolean hasNull() {
-		if(this.getCity().isBlank()
-				||this.getNeighborhood().isBlank()
-				||this.getNumber().equals(null)
-				||this.getPublicPlace().isBlank()
-				||this.getState().isBlank()
-				||this.getZipCode().isBlank())
+		if(this.getCity()== null
+				||this.getNeighborhood()== null
+				||this.getNumber()== null
+				||this.getPublicPlace()== null
+				||this.getState()== null
+				||this.getZipCode()== null)
 			return true;
 		return false;
 	}
