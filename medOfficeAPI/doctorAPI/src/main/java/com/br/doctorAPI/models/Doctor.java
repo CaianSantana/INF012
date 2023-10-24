@@ -11,8 +11,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
 
-
+@Getter
+@Setter
 @Entity(name="Doctors")
 public class Doctor implements HasNull {
 	@Id
@@ -30,7 +33,6 @@ public class Doctor implements HasNull {
 	@Enumerated(EnumType.STRING)
 	private Status status;
 
-
 	public Doctor() {
 	}
 	public Doctor(FormDoctor data){
@@ -44,68 +46,11 @@ public class Doctor implements HasNull {
 		this.status = Status.ACTIVE;
 	}
 
-	
-	public Long getId() {
-		return this.id;
-	}
-	public String getName() {
-		return this.name;
-	}
-	public String getCPF() {
-		return this.cpf;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public String getPhone() {
-		return phone;
-	}
-	public Address getAddress() {
-		return address;
-	}
-	public String getCRM() {
-		return crm;
-	}
-	public Specialty getSpecialty() {
-		return this.specialty;
-	}
-	public Status getStatus() {
-		return status;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	public void setCPF(String cpf) {
-		this.cpf = cpf;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-		
-	}
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-	public void setCRM(String crm) {
-		this.crm = crm;
-	}
-	public void setSpecialty(Specialty specialty) {
-		this.specialty = specialty;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}				
-	public void setStatus(Status status) {
-		this.status = status;
-	}
-
-
-	
 	public boolean hasNull() {
 		if(this.getName().isBlank()
-				||this.getCPF().isBlank()
+				||this.getCpf().isBlank()
 				||this.getEmail().isBlank()
-				||this.getCRM().isBlank()
+				||this.getCrm().isBlank()
 				||this.getSpecialty().equals(null)
 				||this.getAddress().hasNull())
 			return true;

@@ -4,19 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.br.doctorAPI.dtos.DoctorData;
 import com.br.doctorAPI.dtos.FormDoctor;
 import com.br.doctorAPI.enums.Status;
 import com.br.doctorAPI.exception.NullValuesException;
 import com.br.doctorAPI.models.Doctor;
 import com.br.doctorAPI.repositories.DoctorRepository;
-
-
-
 
 @Service
 public class DoctorService {

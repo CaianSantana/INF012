@@ -55,7 +55,11 @@ public class PatientController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<PatientData>updateDoctor(@PathVariable Long id, @RequestBody FormPatient data) {
-		patientService.update(id, data);
+		try {
+			patientService.update(id, data);
+		} catch (NullValueException e) {
+			return new ResponseEntity<PatientData>(HttpStatus.NOT_ACCEPTABLE);
+		}
 		return new ResponseEntity<PatientData>(HttpStatus.ACCEPTED);
 	} 
 	

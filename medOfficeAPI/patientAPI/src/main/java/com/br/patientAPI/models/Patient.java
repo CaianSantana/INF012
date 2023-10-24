@@ -1,9 +1,8 @@
 package com.br.patientAPI.models;
 
 
-import com.br.patientAPI.AbstractProduts.Person;
+import com.br.patientAPI.dtos.FormPatient;
 import com.br.patientAPI.enums.Status;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,9 +11,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity(name="Patients")
-public class Patient implements Person, HasNull {
+public class Patient implements HasNull {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -27,63 +30,20 @@ public class Patient implements Person, HasNull {
 	@Enumerated(EnumType.STRING)
 	private Status status;
 
-	
-	@Override
-	public Long getId() {
-		return id;
+	public Patient(){}
+	public Patient(FormPatient data){
+		this.name = data.name();
+		this.cpf = data.cpf();
+		this.email = data.email();
+		this.phone = data.phone();
+		this.address = data.address();
+		this.status = Status.ACTIVE;
 	}
-	@Override
-	public String getName() {
-		return name;
-	}
-	@Override
-	public String getCPF() {
-		return cpf;
-	}
-	@Override
-	public String getEmail() {
-		return email;
-	}
-	@Override
-	public String getPhone() {
-		return phone;
-	}
-	@Override
-	public Address getAddress() {
-		// TODO Auto-generated method stub
-		return address;
-	}
-	public Status getStatus() {
-		return status;
-	}
-	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
-	@Override
-	public void setCPF(String cpf) {
-		this.cpf = cpf;
-	}
-	@Override
-	public void setEmail(String email) {
-		this.email = email;
-		
-	}
-	@Override
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-	@Override
-	public void setPhone(String phone) {
-		this.phone = phone;		
-	}
-	public void setStatus(Status status) {
-		this.status = status;
-	}
+
 	@Override
 	public boolean hasNull() {
 		if(this.getName().isBlank()
-				||this.getCPF().isBlank()
+				||this.getCpf().isBlank()
 				||this.getEmail().isBlank()
 				||this.getAddress().hasNull())
 			return true;

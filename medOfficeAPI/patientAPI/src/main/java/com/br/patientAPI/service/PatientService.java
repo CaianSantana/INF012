@@ -10,8 +10,6 @@ import com.br.patientAPI.dtos.FormPatient;
 import com.br.patientAPI.dtos.PatientData;
 import com.br.patientAPI.enums.Status;
 import com.br.patientAPI.exceptions.NullValueException;
-import com.br.patientAPI.factories.CreatorPatient;
-import com.br.patientAPI.factories.CreatorPerson;
 import com.br.patientAPI.models.Patient;
 import com.br.patientAPI.repositories.PatientRepository;
 
@@ -32,7 +30,6 @@ public class PatientService {
 		return false;
 	}
 	
-	
 	public List<PatientData> listAll(){
 		List<Patient > list = new ArrayList<Patient >();
 		for (Patient patient : this.patientRepository.findAll()) {
@@ -44,8 +41,7 @@ public class PatientService {
 	}
 	
 	public Patient register(FormPatient data) throws NullValueException {
-		CreatorPerson creator= new CreatorPatient();
-		Patient patient = (Patient) creator.createPerson(data);
+		Patient patient = new Patient(data);
 		if(patient.hasNull()) {
 			throw new NullValueException();
 		}
@@ -76,12 +72,14 @@ public class PatientService {
 		this.patientRepository.save(patient);
 	}
 
-	public void update(Long id, FormPatient data) {
+	public void update(Long id, FormPatient data) throws NullValueException {
 		Patient patient = this.patientRepository.getReferenceById(id);
 		patient.setName(data.name());
-		patient.setCPF(data.cpf());
+		patient.setCpf(data.cpf());
 		patient.setEmail(data.email());
 		patient.setAddress(data.address());
+		if(patient.hasNull())
+			throw new NullValueException();
 		this.patientRepository.save(patient);
 	}
 
