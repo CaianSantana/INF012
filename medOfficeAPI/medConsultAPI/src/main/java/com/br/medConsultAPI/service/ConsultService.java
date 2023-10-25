@@ -50,7 +50,7 @@ public class ConsultService {
 
 	
 	public boolean isNull(Object object) {
-		if(object.equals(null))
+		if(object == null)
 			return true;
 		return false;
 	}
@@ -67,12 +67,12 @@ public class ConsultService {
 
 	private Long getRandomDoctor(Consult consult) throws NoDoctorAvailableException {
 		List<DoctorData> docList = this.findAllDoctors();
+		List<Consult> consultList = this.consultRepository.findAll();
 		Collections.shuffle(docList);
 		for(int i=0; i<docList.size(); i++) {
-			for(Consult item: this.consultRepository.findAll()) {
+			for(Consult item: consultList) {
 				if(item.getDoctorID() == docList.get(i).id()
-						&&!item.getScheduling().compareDate(consult.getScheduling())
-						&&!item.getScheduling().compareTime(consult.getScheduling())) {
+						&&!item.getScheduling().compareDate(consult.getScheduling())||!item.getScheduling().compareTime(consult.getScheduling())) {
 						return docList.get(i).id();
 					}
 			}
@@ -131,10 +131,10 @@ public class ConsultService {
 		consult.getScheduling().dateValidation();
 		consult.getScheduling().hourValidation();
 		consult.getScheduling().consultTimeValidation();
-		if(isNull(this.findDoctorById(data.doctorID()))) {
+		if(isNull(data.doctorID())) {
 			consult.setDoctorID(getRandomDoctor(consult));
+		}else if(isNull(this.findDoctorById(data.doctorID())))
 			throw new DoctorNotFoundException();
-		}
 		if(isNull(this.findPatientById(data.patientID())))	
 			throw new PatientNotFoundException();
 		for(Consult item: this.consultRepository.findAll()) {
