@@ -22,6 +22,7 @@ import com.br.medConsultAPI.exceptions.DoctorNotFoundException;
 import com.br.medConsultAPI.exceptions.InvalidDataException;
 import com.br.medConsultAPI.exceptions.InvalidHourException;
 import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
+import com.br.medConsultAPI.exceptions.MinimumThirtyMinuteNoticeException;
 import com.br.medConsultAPI.exceptions.NoDoctorAvailableException;
 import com.br.medConsultAPI.exceptions.PatientNotFoundException;
 import com.br.medConsultAPI.exceptions.PatientOnlyHaveOneConsultPerDayException;
@@ -49,7 +50,8 @@ public class ConsultController {
 				| PatientOnlyHaveOneConsultPerDayException 
 				| DoctorCannotHaveMoreThanOneConsultatAtTimeException
 				| NoDoctorAvailableException
-				| InvalidSchedulingException e) {
+				| InvalidSchedulingException
+				| MinimumThirtyMinuteNoticeException e) {
 			System.err.println(e);
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}

@@ -10,6 +10,7 @@ import com.br.medConsultAPI.enums.DayOfWeek;
 import com.br.medConsultAPI.exceptions.InvalidDataException;
 import com.br.medConsultAPI.exceptions.InvalidHourException;
 import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
+import com.br.medConsultAPI.exceptions.MinimumThirtyMinuteNoticeException;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -107,11 +108,21 @@ public class Scheduling {
 			||(this.minuteTime<0 || this.minuteTime>59))
 			throw new InvalidHourException();
 	}
-	public void consultTimeValidation() throws InvalidSchedulingException{
+	public void consultTimeValidation() throws InvalidSchedulingException, MinimumThirtyMinuteNoticeException{
+		Integer currentHour;
+		Integer currentMinute;
+		Date date = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+		currentMinute = calendar.get(Calendar.MINUTE);
 		if(this.hourTime<7 
 			|| this.hourTime>16
 			|| this.dayOfWeek == DayOfWeek.SUNDAY)
 			throw new InvalidSchedulingException();
+		if((currentHour==this.hourTime && (currentMinute-this.minuteTime)>=30)
+			||(currentHour==(this.hourTime-1) && (this.minuteTime-currentMinute)<=-30))
+			throw new MinimumThirtyMinuteNoticeException();
 	}
 	public boolean compareDate(Scheduling scheduling) {
 		if(this.monthDate.equals(scheduling.getMonthDate())
