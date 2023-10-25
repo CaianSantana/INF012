@@ -5,6 +5,6 @@ import com.br.medConsultAPI.model.Scheduling;
 
 public record SchedulingData(Long id, Integer day, Integer month, Integer year, DayOfWeek dayOfWeek, Integer hour, Integer minute) {
 	public SchedulingData(Scheduling scheduling) {
-		this(scheduling.getID(),scheduling.getDayDate(), scheduling.getMonth(), scheduling.getYear(), scheduling.getDayOfWeek(), scheduling.getHour(), scheduling.getMinute());
+		this(scheduling.getId(),scheduling.getDayDate(), scheduling.getMonthDate(), scheduling.getYearDate(), scheduling.getDayOfWeek(), scheduling.getHourTime(), scheduling.getMinuteTime());
 	}
 }

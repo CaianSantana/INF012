@@ -15,7 +15,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity(name="Consults")
 public class Consult {
 	@Id
@@ -37,42 +41,9 @@ public class Consult {
 	public Consult(FormConsult data) {
 		this.doctorID = data.doctorID();
 		this.patientID = data.patientID();
-		this.scheduling = data.scheduling();
+		this.scheduling = new Scheduling(data.scheduling());
 		this.status = Status.SCHEDULED;
 		this.cancelReason = null;
-	}
-	public Long getId() {
-		return id;
-	}
-	public Long getDoctorID() {
-		return doctorID;
-	}
-	public Long getPatientID() {
-		return patientID;
-	}
-	public Scheduling getScheduling() {
-		return scheduling;
-	}
-	public Status getStatus() {
-		return status;
-	}
-	public String getCancelReason() {
-		return cancelReason;
-	}
-	public void setDoctor(Long doctorID) {
-		this.doctorID = doctorID;
-	}
-	public void setPatient(Long patientID) {
-		this.patientID = patientID;
-	}
-	public void setDate(Scheduling scheduling) {
-		this.scheduling = scheduling;
-	}
-	public void setStatus(Status status) {
-		this.status = status;
-	}
-	public void setCancelReason(String cancelReason) {
-		this.cancelReason = cancelReason;
 	}
 	
 	public void validateConsult() throws InactiveException, PatientOnlyHaveOneConsultPerDayException, DoctorAlreadyHaveScheduledAppointmentException{

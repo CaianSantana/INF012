@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +23,12 @@ import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultatAtTim
 import com.br.medConsultAPI.exceptions.DoctorNotFoundException;
 import com.br.medConsultAPI.exceptions.InvalidDataException;
 import com.br.medConsultAPI.exceptions.InvalidHourException;
+import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
 import com.br.medConsultAPI.exceptions.NoDoctorAvailableException;
 import com.br.medConsultAPI.exceptions.PatientNotFoundException;
 import com.br.medConsultAPI.exceptions.PatientOnlyHaveOneConsultPerDayException;
 import com.br.medConsultAPI.model.Consult;
+import com.br.medConsultAPI.model.Scheduling;
 import com.br.medConsultAPI.repositories.ConsultRepository;
 
 @Service
@@ -70,7 +71,7 @@ public class ConsultService {
 			for(Consult item: this.consultRepository.findAll()) {
 				if(item.getDoctorID() == docList.get(i).id()
 						&&!item.getScheduling().compareDate(consult.getScheduling())
-						&&!item.getScheduling().compareHour(consult.getScheduling())) {
+						&&!item.getScheduling().compareTime(consult.getScheduling())) {
 						return docList.get(i).id();
 					}
 			}
@@ -123,12 +124,14 @@ public class ConsultService {
     }
 
 	public Consult register(FormConsult data) throws DoctorNotFoundException, PatientNotFoundException, InvalidDataException, InvalidHourException, 
-	PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultatAtTimeException, NoDoctorAvailableException {
+	PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultatAtTimeException, NoDoctorAvailableException, InvalidSchedulingException {
 		Consult consult = new Consult(data);
-		data.scheduling().dateValidation();
-		data.scheduling().hourValidation();
+		System.out.println(consult.getScheduling().toString());
+		consult.getScheduling().dateValidation();
+		consult.getScheduling().hourValidation();
+		consult.getScheduling().consultTimeValidation();
 		if(isNull(this.findDoctorById(data.doctorID()))) {
-			consult.setDoctor(getRandomDoctor(consult));
+			consult.setDoctorID(getRandomDoctor(consult));
 			throw new DoctorNotFoundException();
 		}
 		if(isNull(this.findPatientById(data.patientID())))	
@@ -140,10 +143,10 @@ public class ConsultService {
 			}
 			if(item.getDoctorID() == consult.getDoctorID()
 					&&item.getScheduling().compareDate(consult.getScheduling())
-					&&item.getScheduling().compareHour(consult.getScheduling())) {
+					&&item.getScheduling().compareTime(consult.getScheduling())) {
 				throw new DoctorCannotHaveMoreThanOneConsultatAtTimeException();
 			}
-		}
+			}
 		this.consultRepository.save(consult);
 		return consult;
 	}
@@ -160,9 +163,10 @@ public class ConsultService {
 	}
 	public void update(Long id, FormConsult data) {
 			Consult consult = this.findConsultById(id);
-			consult.setDoctor(data.doctorID());
-			consult.setPatient(data.patientID());
-			consult.setDate(data.scheduling());
+			Scheduling scheduling = new Scheduling(data.scheduling());
+			consult.setDoctorID(data.doctorID());
+			consult.setPatientID(data.patientID());
+			consult.setScheduling(scheduling);
 			this.consultRepository.save(consult);
 	}
 }
