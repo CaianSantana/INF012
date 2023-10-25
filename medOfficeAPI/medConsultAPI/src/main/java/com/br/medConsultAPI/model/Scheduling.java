@@ -108,7 +108,9 @@ public class Scheduling {
 			throw new InvalidHourException();
 	}
 	public void consultTimeValidation() throws InvalidSchedulingException{
-		if(this.hourTime<7 || this.hourTime>16)
+		if(this.hourTime<7 
+			|| this.hourTime>16
+			|| this.dayOfWeek == DayOfWeek.SUNDAY)
 			throw new InvalidSchedulingException();
 	}
 	public boolean compareDate(Scheduling scheduling) {
