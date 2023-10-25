@@ -27,18 +27,17 @@ public class Scheduling {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private int dayDate;
-	private int monthDate;
-	private int yearDate;
+	private Integer dayDate;
+	private Integer monthDate;
+	private Integer yearDate;
 	@Enumerated(EnumType.STRING)
 	private DayOfWeek dayOfWeek;
-	private int hourTime;
-	private int minuteTime;
-	private final int DURATION = 1;
-	private int hourFinal;
+	private Integer hourTime;
+	private Integer minuteTime;
+	private final Integer DURATION = 1;
+	private Integer hourFinal;
 	
 	public Scheduling() {
-		hourFinal = this.hourTime+DURATION;
 	}
 	
 	public Scheduling(FormScheduling data) {
@@ -47,7 +46,7 @@ public class Scheduling {
 		this.yearDate = data.year();
 		this.dayOfWeek = data.dayOfWeek();
 		this.hourTime = data.hour();
-		this.hourFinal = this.hourTime+DURATION;
+		this.hourFinal = data.hour()+DURATION;
 		this.minuteTime = data.minute();
 	}
 	
@@ -55,7 +54,7 @@ public class Scheduling {
 		Date date = new Date();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-		int nextYear = calendar.get(Calendar.YEAR);
+		Integer nextYear = calendar.get(Calendar.YEAR);
 		nextYear++;
 		Map<Integer, String> monthWith30Days = new HashMap<>();
 		monthWith30Days.put(4, "April");
@@ -71,7 +70,7 @@ public class Scheduling {
 		monthWith31Days.put(10, "October");
 		monthWith31Days.put(12, "December");
 
-		if(this.yearDate==calendar.get(Calendar.YEAR) || this.yearDate==nextYear){
+		if(this.yearDate>=calendar.get(Calendar.YEAR) && this.yearDate<=nextYear){
 			if(monthWith30Days.containsKey(this.monthDate)){
 				if(this.dayDate<1 || this.dayDate>30){
 					System.out.println("30");
@@ -100,8 +99,8 @@ public class Scheduling {
 				System.out.println("ano "+ nextYear);
 				throw new InvalidDataException();	
 			}
-				
 		}
+		throw new InvalidDataException();
 	}
 	public void hourValidation() throws InvalidHourException {
 		if((this.hourTime<0 || this.hourTime>23)
@@ -113,21 +112,21 @@ public class Scheduling {
 			throw new InvalidSchedulingException();
 	}
 	public boolean compareDate(Scheduling scheduling) {
-		if(this.monthDate == scheduling.getMonthDate()
-				&&this.dayDate == scheduling.getDayDate()
-				&&this.yearDate == scheduling.getYearDate())
+		if(this.monthDate.equals(scheduling.getMonthDate())
+				&&this.dayDate.equals(scheduling.getDayDate()) 
+				&&this.yearDate.equals(scheduling.getYearDate()))
 			return true;
 		return false;
 	}
 	public boolean compareTime(Scheduling scheduling) {
-		if(scheduling.getHourTime() == this.hourTime
-			|| (scheduling.getHourTime() == this.hourFinal && scheduling.getMinuteTime()<this.minuteTime))
+		if(scheduling.getHourTime().equals(this.hourTime) 
+			|| (scheduling.getHourTime().equals(this.hourFinal) && scheduling.getMinuteTime()<this.minuteTime))
 			return true;
 		return false;
 	}
 	
 	@Override
 	public String toString() {
-		return dayOfWeek+" at"+hourTime+":"+minuteTime+", "+monthDate + "/" + dayDate + "/" + yearDate;
+		return dayOfWeek+" at "+hourTime+":"+minuteTime+", "+monthDate + "/" + dayDate + "/" + yearDate;
 	}
 }
