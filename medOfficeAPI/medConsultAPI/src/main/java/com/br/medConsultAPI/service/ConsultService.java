@@ -77,7 +77,7 @@ public class ConsultService {
 					}
 			}
 		}
-		throw new NoDoctorAvailableException();
+		throw new NoDoctorAvailableException("No Doctor available in this moment. Try agayn later...");
 	}
 	
 	
@@ -134,18 +134,18 @@ public class ConsultService {
 		if(isNull(data.doctorID())) {
 			consult.setDoctorID(getRandomDoctor(consult));
 		}else if(isNull(this.findDoctorById(data.doctorID())))
-			throw new DoctorNotFoundException();
+			throw new DoctorNotFoundException("Unable to find the respective doctor in the system");
 		if(isNull(this.findPatientById(data.patientID())))	
-			throw new PatientNotFoundException();
+			throw new PatientNotFoundException("Unable to find the respective patient in the system");
 		for(Consult item: this.consultRepository.findAll()) {
 			if(item.getPatientID() == consult.getPatientID()
 					&&item.getScheduling().compareDate(consult.getScheduling())) {
-				throw new PatientOnlyHaveOneConsultPerDayException();
+				throw new PatientOnlyHaveOneConsultPerDayException("The Patient cannot have more than one appointment per day");
 			}
 			if(item.getDoctorID() == consult.getDoctorID()
 					&&item.getScheduling().compareDate(consult.getScheduling())
 					&&item.getScheduling().compareTime(consult.getScheduling())) {
-				throw new DoctorCannotHaveMoreThanOneConsultatAtTimeException();
+				throw new DoctorCannotHaveMoreThanOneConsultatAtTimeException("The doctor can only have one appointment at a time");
 			}
 			}
 		this.consultRepository.save(consult);
@@ -156,7 +156,7 @@ public class ConsultService {
 
 	public void cancel(Long id, String cancelReason) throws CancelReasonCannotBeNullException {
 		if(cancelReason.isBlank())
-			throw new CancelReasonCannotBeNullException(); 
+			throw new CancelReasonCannotBeNullException("You must enter a reason to cancel the scheduling."); 
 		Consult consult = this.findConsultById(id);
 		consult.setStatus(Status.CANCELLED);
 		consult.setCancelReason(cancelReason);

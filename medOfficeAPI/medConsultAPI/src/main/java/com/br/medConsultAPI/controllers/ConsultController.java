@@ -38,6 +38,8 @@ public class ConsultController {
 	public List<ConsultData> listAllConsults(){
 		return service.listAllConsults();
 	}
+
+
 	@PostMapping
 	public ResponseEntity<ConsultData> scheduleConsult(@RequestBody FormConsult data){
 		Consult consult;
@@ -52,7 +54,8 @@ public class ConsultController {
 				| NoDoctorAvailableException
 				| InvalidSchedulingException
 				| MinimumThirtyMinuteNoticeException e) {
-			System.err.println(e);
+			
+			System.err.println(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		return new ResponseEntity<ConsultData>(new ConsultData(consult), HttpStatus.CREATED);
@@ -67,7 +70,7 @@ public class ConsultController {
 		try {
 			service.cancel(id, cancelReason);
 		} catch (CancelReasonCannotBeNullException e) {
-			System.err.println(e);
+			System.err.println(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
