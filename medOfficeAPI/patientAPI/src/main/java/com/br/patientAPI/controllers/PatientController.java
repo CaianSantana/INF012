@@ -1,7 +1,14 @@
 package com.br.patientAPI.controllers;
 
-import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Stream;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,43 +34,55 @@ public class PatientController {
 	@Autowired
 	private PatientService patientService;
 	
-	@GetMapping("/findAll")
-	public List<PatientData> listAllPatients(){
-		return patientService.listAll();
+	@GetMapping("/findAll/{pageNumber}")
+	public Stream<PatientData> listAllPatients(@PathVariable int pageNumber){
+		Pageable pageable = PageRequest.of(pageNumber, 10, Sort.by("name"));
+		Page<PatientData> page = new PageImpl<>(patientService.listAll(pageable), pageable, pageable.getPageSize());
+		return page.get();
 	}
 
-	@GetMapping("/findByName")
-	public List<PatientData> findPatientByName(String name){
-		return patientService.findByName(name);
+	@GetMapping("/findByCpf")
+	public ResponseEntity<String> findPatientByName(String cpf){
+		String patient;
+		try {
+			patient = patientService.findByCpf(cpf).toString();
+		} catch (NullValueException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+		}
+		return  new ResponseEntity<String>(patient, HttpStatus.ACCEPTED);
 	}
 
 	@GetMapping("/findById/{id}")
-	public PatientData findById(@PathVariable Long id) {
-		PatientData patient = patientService.findById(id);
-		return patient;
+	public ResponseEntity<String> findById(@PathVariable Long id) {
+		String patient;
+		try {
+			patient = patientService.findById(id).toString();
+		} catch (NoSuchElementException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+		}
+		return  new ResponseEntity<String>(patient, HttpStatus.ACCEPTED);
 	}
 	
 	@PostMapping
-	public ResponseEntity<PatientData> registerPatient(@RequestBody FormPatient data){
+	public ResponseEntity<String> registerPatient(@RequestBody FormPatient data){
 		Patient patient;
 		try {
 			patient = patientService.register(data);
 		} catch (NullValueException e) {
-			System.err.println(e);
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<String>(e.getMessage() ,HttpStatus.NOT_ACCEPTABLE);
 		}
-		return new ResponseEntity<PatientData>( new PatientData(patient) ,HttpStatus.CREATED);
+		return new ResponseEntity<String>(new PatientData(patient).toString() ,HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<PatientData>updateDoctor(@PathVariable Long id, @RequestBody FormPatient data) {
+	public ResponseEntity<String>updateDoctor(@PathVariable Long id, @RequestBody FormPatient data) {
+		Patient patient;
 		try {
-			patientService.update(id, data);
+			patient = patientService.update(id, data);
 		} catch (NullValueException | OperationNotAllowedException e) {
-			System.err.println(e);
-			return new ResponseEntity<PatientData>(HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_ACCEPTABLE);
 		}
-		return new ResponseEntity<PatientData>(HttpStatus.ACCEPTED);
+		return new ResponseEntity<String>(new PatientData(patient).toString(), HttpStatus.ACCEPTED);
 	} 
 	
 	@DeleteMapping("/{id}")
@@ -71,5 +90,6 @@ public class PatientController {
 		patientService.erase(id);
 		return  new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
+	
 	
 }

@@ -36,7 +36,7 @@ public class Patient implements HasNull {
 		this.cpf = data.cpf();
 		this.email = data.email();
 		this.phone = data.phone();
-		this.address = data.address();
+		this.address = new Address(data.address());
 		this.status = Status.ACTIVE;
 	}
 
@@ -49,4 +49,6 @@ public class Patient implements HasNull {
 			return true;
 		return false;
 	}
+
+	
 }
