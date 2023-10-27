@@ -1,6 +1,5 @@
 package com.br.patientAPI.controllers;
 
-import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.br.patientAPI.dtos.FormPatient;
 import com.br.patientAPI.dtos.PatientData;
+import com.br.patientAPI.exceptions.CpfAlreadyExistsException;
 import com.br.patientAPI.exceptions.NullValueException;
 import com.br.patientAPI.exceptions.OperationNotAllowedException;
+import com.br.patientAPI.exceptions.PatientNotFoundException;
 import com.br.patientAPI.models.Patient;
 import com.br.patientAPI.service.PatientService;
 
@@ -42,47 +43,51 @@ public class PatientController {
 	}
 
 	@GetMapping("/findByCpf")
-	public ResponseEntity<String> findPatientByName(String cpf){
-		String patient;
+	public ResponseEntity<PatientData> findPatientByName(String cpf) throws PatientNotFoundException{
+		PatientData patient;
 		try {
-			patient = patientService.findByCpf(cpf).toString();
-		} catch (NullValueException e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+			patient = patientService.findByCpf(cpf);
+		} catch (PatientNotFoundException e) {
+			throw new PatientNotFoundException();
 		}
-		return  new ResponseEntity<String>(patient, HttpStatus.ACCEPTED);
+		return  new ResponseEntity<PatientData>(patient, HttpStatus.ACCEPTED);
 	}
 
 	@GetMapping("/findById/{id}")
-	public ResponseEntity<String> findById(@PathVariable Long id) {
-		String patient;
+	public ResponseEntity<PatientData> findById(@PathVariable Long id) throws PatientNotFoundException {
+		PatientData patient;
 		try {
-			patient = patientService.findById(id).toString();
-		} catch (NoSuchElementException e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+			patient = patientService.findById(id);
+		} catch (PatientNotFoundException e) {
+			throw new PatientNotFoundException();
 		}
-		return  new ResponseEntity<String>(patient, HttpStatus.ACCEPTED);
+		return new ResponseEntity<PatientData>(patient, HttpStatus.ACCEPTED);
 	}
 	
 	@PostMapping
-	public ResponseEntity<String> registerPatient(@RequestBody FormPatient data){
+	public ResponseEntity<PatientData> registerPatient(@RequestBody FormPatient data) throws NullValueException, CpfAlreadyExistsException{
 		Patient patient;
 		try {
 			patient = patientService.register(data);
 		} catch (NullValueException e) {
-			return new ResponseEntity<String>(e.getMessage() ,HttpStatus.NOT_ACCEPTABLE);
+			throw new NullValueException();
+		} catch (CpfAlreadyExistsException e) {
+			throw new CpfAlreadyExistsException();
 		}
-		return new ResponseEntity<String>(new PatientData(patient).toString() ,HttpStatus.CREATED);
+		return new ResponseEntity<PatientData>(new PatientData(patient) ,HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<String>updateDoctor(@PathVariable Long id, @RequestBody FormPatient data) {
+	public ResponseEntity<PatientData>updatePatient(@PathVariable Long id, @RequestBody FormPatient data) throws NullValueException, OperationNotAllowedException {
 		Patient patient;
 		try {
 			patient = patientService.update(id, data);
-		} catch (NullValueException | OperationNotAllowedException e) {
-			return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_ACCEPTABLE);
+		} catch (NullValueException e) {
+			throw new NullValueException();
+		} catch (OperationNotAllowedException e1){
+			throw new OperationNotAllowedException();
 		}
-		return new ResponseEntity<String>(new PatientData(patient).toString(), HttpStatus.ACCEPTED);
+		return new ResponseEntity<PatientData>(new PatientData(patient), HttpStatus.ACCEPTED);
 	} 
 	
 	@DeleteMapping("/{id}")

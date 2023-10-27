@@ -2,7 +2,6 @@ package com.br.patientAPI.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -10,8 +9,10 @@ import org.springframework.stereotype.Service;
 import com.br.patientAPI.dtos.FormPatient;
 import com.br.patientAPI.dtos.PatientData;
 import com.br.patientAPI.enums.Status;
+import com.br.patientAPI.exceptions.CpfAlreadyExistsException;
 import com.br.patientAPI.exceptions.NullValueException;
 import com.br.patientAPI.exceptions.OperationNotAllowedException;
+import com.br.patientAPI.exceptions.PatientNotFoundException;
 import com.br.patientAPI.models.Address;
 import com.br.patientAPI.models.Patient;
 import com.br.patientAPI.repositories.PatientRepository;
@@ -41,26 +42,28 @@ public class PatientService {
 		return  this.converterLista(list);
     }
 
-	public PatientData findByCpf(String cpf) throws NullValueException{
+	public PatientData findByCpf(String cpf) throws PatientNotFoundException{
 		Patient patient = this.patientRepository.findByCpfContaining(cpf);
-		if(patient == null)
-			throw new NullValueException("No patient with this cpf found.");
+		if(patient == null || !verifyStatus(patient))
+			throw new PatientNotFoundException();
 		return new PatientData(patient);
 	}
 
-	public PatientData findById(Long id)throws NoSuchElementException{
+	public PatientData findById(Long id)throws PatientNotFoundException{
 		if(!verifyStatus(this.patientRepository.findById(id).get())) {
-			throw new NoSuchElementException("No patient with this ID found.");
+			throw new PatientNotFoundException();
 		}
 		return new PatientData(this.patientRepository.findById(id).orElseThrow());
 	}
 
 	
-	public Patient register(FormPatient data) throws NullValueException {
+	public Patient register(FormPatient data) throws NullValueException, CpfAlreadyExistsException {
 		Patient patient = new Patient(data);
 		if(patient.hasNull()) {
-			throw new NullValueException("All fields, with the exception of the number and address complement, must be filled out.");
+			throw new NullValueException();
 		}
+		if(this.patientRepository.findByCpfContaining(patient.getCpf()) != null)
+			throw new CpfAlreadyExistsException();
 		patientRepository.save(patient);
 		return patient;
 	}
@@ -79,10 +82,10 @@ public class PatientService {
 		&&data.email()!=null){
 			if(!data.email().equals(patient.getEmail())
 			||!data.cpf().equals(patient.getCpf()))
-				throw new OperationNotAllowedException("It is not allowed to update CPF and email");
+				throw new OperationNotAllowedException();
 		}
 		if(patient.hasNull())
-			throw new NullValueException("All fields, with the exception of the number and address complement, must be filled out.");
+			throw new NullValueException();
 		this.patientRepository.save(patient);
 		return patient;
 	}
