@@ -38,7 +38,7 @@ public class Doctor implements HasNull {
 		this.name = data.name();
 		this.email = data.email();
 		this.phone = data.phone();
-		this.address = data.address();
+		this.address = new Address(data.address());
 		this.crm = data.crm();
 		this.specialty = data.specialty();
 		this.status = Status.ACTIVE;

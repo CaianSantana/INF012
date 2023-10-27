@@ -1,7 +1,12 @@
 package com.br.doctorAPI.controllers;
 
-import java.util.List;
+import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.br.doctorAPI.dtos.DoctorData;
 import com.br.doctorAPI.dtos.FormDoctor;
+import com.br.doctorAPI.exception.CrmAlreadyExistsException;
+import com.br.doctorAPI.exception.DoctorNotFoundException;
 import com.br.doctorAPI.exception.NullValuesException;
 import com.br.doctorAPI.exception.OperationNotAllowedException;
 import com.br.doctorAPI.models.Doctor;
@@ -28,39 +35,43 @@ public class DoctorController {
 	@Autowired
 	private DoctorService doctorService;
 	
-	@GetMapping("/findAll")
-	public List<DoctorData> listAllDoctors(){
-		return doctorService.listAll();
+	@GetMapping("/findAll/{pageNumber}")
+	public Stream<DoctorData> listAllDoctors(@PathVariable int pageNumber){
+		Pageable pageable = PageRequest.of(pageNumber, 10, Sort.by("name"));
+		Page<DoctorData> page = new PageImpl<>(doctorService.listAll(pageable), pageable, pageable.getPageSize());
+		return page.get();
 	}
 	
-	@GetMapping("/findByName")
-	public List<DoctorData> findDoctorByName(String name){
-		return doctorService.findByName(name);
+	@GetMapping("/findByCrm")
+	public DoctorData findDoctorBycrm(String crm) throws DoctorNotFoundException{
+		return doctorService.findByCrm(crm);
 	}
 	@GetMapping("/findById/{id}")
-	public DoctorData findDoctorById(@PathVariable Long id){
-		DoctorData doctor= doctorService.findById(id);
-		return doctor;
+	public DoctorData findDoctorById(@PathVariable Long id) throws DoctorNotFoundException{
+		return doctorService.findById(id);
 	}
 	
 	@PostMapping
-	public ResponseEntity<DoctorData> registerDoctor(@RequestBody FormDoctor data) {
+	public ResponseEntity<DoctorData> registerDoctor(@RequestBody FormDoctor data) throws CrmAlreadyExistsException, NullValuesException{
 		Doctor doctor;
 		try {
 			doctor = doctorService.register(data);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+		} catch (CrmAlreadyExistsException e) {
+			throw new CrmAlreadyExistsException();
+		} catch (NullValuesException e) {
+			throw new NullValuesException();
 		}
 		return new ResponseEntity<DoctorData>(new DoctorData(doctor), HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<DoctorData>updateDoctor(@PathVariable Long id, @RequestBody FormDoctor data) {
+	public ResponseEntity<DoctorData>updateDoctor(@PathVariable Long id, @RequestBody FormDoctor data) throws NullValuesException, OperationNotAllowedException {
 		try {
 			doctorService.update(id, data);
-		} catch (NullValuesException | OperationNotAllowedException e) {
-			System.err.println(e);
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+		} catch (NullValuesException e) {
+			throw new NullValuesException();
+		} catch (OperationNotAllowedException e1){
+			throw new OperationNotAllowedException();
 		}
 		return new ResponseEntity<DoctorData>(HttpStatus.ACCEPTED);
 	} 
@@ -68,7 +79,7 @@ public class DoctorController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eraseDoctor(@PathVariable Long id) {
 		doctorService.erase(id);
-		return  new ResponseEntity<>(HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 	
 	
