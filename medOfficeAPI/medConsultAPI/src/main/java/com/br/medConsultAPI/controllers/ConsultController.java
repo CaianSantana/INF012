@@ -1,7 +1,6 @@
 package com.br.medConsultAPI.controllers;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +12,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.br.medConsultAPI.dtos.ConsultData;
 import com.br.medConsultAPI.dtos.FormConsult;
 import com.br.medConsultAPI.exceptions.CancelReasonCannotBeNullException;
-import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultatAtTimeException;
+import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultAtTimeException;
 import com.br.medConsultAPI.exceptions.DoctorNotFoundException;
 import com.br.medConsultAPI.exceptions.InvalidDataException;
 import com.br.medConsultAPI.exceptions.InvalidHourException;
@@ -41,22 +39,30 @@ public class ConsultController {
 
 
 	@PostMapping
-	public ResponseEntity<ConsultData> scheduleConsult(@RequestBody FormConsult data){
+	public ResponseEntity<ConsultData> scheduleConsult(@RequestBody FormConsult data) throws InvalidDataException, InvalidHourException, 
+	PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultAtTimeException, NoDoctorAvailableException, 
+	InvalidSchedulingException, MinimumThirtyMinuteNoticeException, PatientNotFoundException, DoctorNotFoundException{
 		Consult consult;
 		try {
 			consult = service.register(data);
-		} catch (DoctorNotFoundException | PatientNotFoundException e) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		} catch (InvalidDataException 
-				| InvalidHourException 
-				| PatientOnlyHaveOneConsultPerDayException 
-				| DoctorCannotHaveMoreThanOneConsultatAtTimeException
-				| NoDoctorAvailableException
-				| InvalidSchedulingException
-				| MinimumThirtyMinuteNoticeException e) {
-			
-			System.err.println(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+		} catch (DoctorNotFoundException e) {
+			throw new DoctorNotFoundException();
+		} catch (PatientNotFoundException e) {
+			throw new PatientNotFoundException();
+		} catch (InvalidDataException e) {
+			throw new InvalidDataException();
+		} catch(InvalidHourException e){
+			throw new InvalidHourException();
+		} catch(PatientOnlyHaveOneConsultPerDayException e){
+			throw new PatientOnlyHaveOneConsultPerDayException();
+		} catch(DoctorCannotHaveMoreThanOneConsultAtTimeException e){
+			throw new DoctorCannotHaveMoreThanOneConsultAtTimeException();
+		} catch(NoDoctorAvailableException e){
+			throw new NoDoctorAvailableException();
+		} catch(InvalidSchedulingException e){
+			throw new InvalidSchedulingException();
+		} catch(MinimumThirtyMinuteNoticeException e){
+			throw new MinimumThirtyMinuteNoticeException();
 		}
 		return new ResponseEntity<ConsultData>(new ConsultData(consult), HttpStatus.CREATED);
 	}

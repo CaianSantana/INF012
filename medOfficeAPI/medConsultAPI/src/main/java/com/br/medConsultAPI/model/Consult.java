@@ -2,10 +2,10 @@ package com.br.medConsultAPI.model;
 
 import com.br.medConsultAPI.dtos.FormConsult;
 import com.br.medConsultAPI.enums.Status;
-import com.br.medConsultAPI.exceptions.DoctorAlreadyHaveScheduledAppointmentException;
-
-import com.br.medConsultAPI.exceptions.InactiveException;
-import com.br.medConsultAPI.exceptions.PatientOnlyHaveOneConsultPerDayException;
+import com.br.medConsultAPI.exceptions.InvalidDataException;
+import com.br.medConsultAPI.exceptions.InvalidHourException;
+import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
+import com.br.medConsultAPI.exceptions.MinimumThirtyMinuteNoticeException;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -25,8 +25,8 @@ public class Consult {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Long doctorID;
-	private Long patientID;
+	private String crm;
+	private String cpf;
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Scheduling scheduling;
 	@Enumerated(EnumType.STRING)
@@ -39,37 +39,16 @@ public class Consult {
 		this.cancelReason = null;
 	}
 	public Consult(FormConsult data) {
-		this.doctorID = data.doctorID();
-		this.patientID = data.patientID();
+		this.crm = data.crm();
+		this.cpf = data.cpf();
 		this.scheduling = new Scheduling(data.scheduling());
 		this.status = Status.SCHEDULED;
 		this.cancelReason = null;
 	}
 	
-	public void validateConsult() throws InactiveException, PatientOnlyHaveOneConsultPerDayException, DoctorAlreadyHaveScheduledAppointmentException{
+	public void validateConsult() throws  InvalidSchedulingException, MinimumThirtyMinuteNoticeException, InvalidDataException, InvalidHourException{
+		this.scheduling.dateValidation();
+		this.scheduling.hourValidation();
+		this.scheduling.consultTimeValidation();
 	}
-	
-		
-		
-
-/*
-O sistema deve possuir uma funcionalidade que permita o agendamento de consultas, na qual as seguintes informações deverão ser preenchidas:
-
-Paciente
-Médico
-Data/Hora da consulta
-
-As seguintes regras de negócio devem ser validadas pelo sistema:
-
-O horário de funcionamento da clínica é de segunda a sábado, das 07:00 às 19:00;
-As consultas tem duração fixa de 1 hora;
-As consultas devem ser agendadas com antecedência mínima de 30 minutos;
-Não permitir o agendamento de consultas com pacientes inativos no sistema;
-Não permitir o agendamento de consultas com médicos inativos no sistema;
-Não permitir o agendamento de mais de uma consulta no mesmo dia para um mesmo paciente;
-Não permitir o agendamento de uma consulta com um médico que já possui outra consulta agendada na mesma data/hora;
-A escolha do médico é opcional, sendo que nesse caso o sistema deve escolher aleatoriamente algum médico disponível na data/hora preenchida.
- */	
-		
-
 }

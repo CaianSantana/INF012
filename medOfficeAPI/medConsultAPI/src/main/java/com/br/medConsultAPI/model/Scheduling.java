@@ -75,14 +75,14 @@ public class Scheduling {
 			if(monthWith30Days.containsKey(this.monthDate)){
 				if(this.dayDate<1 || this.dayDate>30){
 					System.out.println("30");
-					throw new InvalidDataException("Enter a valid day, month and year");
+					throw new InvalidDataException();
 				}
 				return;
 			}	
 			else if(monthWith31Days.containsKey(this.monthDate)){
 				if(this.dayDate<1 || this.dayDate>31){
 					System.out.println("31");
-					throw new InvalidDataException("Enter a valid day, month and year");
+					throw new InvalidDataException();
 				}
 				return;
 			}	
@@ -90,7 +90,7 @@ public class Scheduling {
 				if((this.dayDate<1 || this.dayDate>28)){
 					if(!(this.dayDate == 29 && Year.isLeap(this.yearDate))){
 					System.out.println("29");
-					throw new InvalidDataException("Enter a valid day, month and year");
+					throw new InvalidDataException();
 					}
 					System.out.println("28");
 					return;
@@ -98,15 +98,15 @@ public class Scheduling {
 			}
 			else{
 				System.out.println("ano "+ nextYear);
-				throw new InvalidDataException("Enter a valid day, month and year");	
+				throw new InvalidDataException();	
 			}
 		}
-		throw new InvalidDataException("Enter a valid day, month and year");
+		throw new InvalidDataException();
 	}
 	public void hourValidation() throws InvalidHourException {
 		if((this.hourTime<0 || this.hourTime>23)
 			||(this.minuteTime<0 || this.minuteTime>59))
-			throw new InvalidHourException("Enter a valid hour and minute");
+			throw new InvalidHourException();
 	}
 	public void consultTimeValidation() throws InvalidSchedulingException, MinimumThirtyMinuteNoticeException{
 		Integer currentHour;
@@ -119,10 +119,10 @@ public class Scheduling {
 		if(this.hourTime<7 
 			|| this.hourTime>18
 			|| this.dayOfWeek == DayOfWeek.SUNDAY)
-			throw new InvalidSchedulingException("Consultations can only be scheduled from Monday to Saturday, between 7am and 6:59pm");
+			throw new InvalidSchedulingException();
 		if((currentHour==this.hourTime && (currentMinute-this.minuteTime)>=30)
 			||(currentHour==(this.hourTime-1) && (this.minuteTime-currentMinute)<=-30))
-			throw new MinimumThirtyMinuteNoticeException("Appointments can only be scheduled 30 minutes in advance");
+			throw new MinimumThirtyMinuteNoticeException();
 	}
 	public boolean compareDate(Scheduling scheduling) {
 		if(this.monthDate.equals(scheduling.getMonthDate())

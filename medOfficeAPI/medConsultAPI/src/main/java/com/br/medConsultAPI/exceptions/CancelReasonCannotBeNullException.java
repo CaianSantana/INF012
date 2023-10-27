@@ -1,8 +1,8 @@
 package com.br.medConsultAPI.exceptions;
 
-public class CancelReasonCannotBeNullException extends Exception {
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-    public CancelReasonCannotBeNullException(String message){
-        super(message);
-    }
+@ResponseStatus(value=HttpStatus.NOT_MODIFIED, reason="You must enter a reason to cancel the scheduling.")
+public class CancelReasonCannotBeNullException extends Exception {
 }
