@@ -8,6 +8,7 @@ import java.util.Date;
 import com.br.medConsultAPI.dtos.FormScheduling;
 import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
 import com.br.medConsultAPI.exceptions.MinimumThirtyMinuteNoticeException;
+import com.br.medConsultAPI.exceptions.MinimumTwentyFourHourNoticeException;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,16 +35,20 @@ public class Scheduling {
 		SimpleDateFormat sfd1 = new SimpleDateFormat("MM dd yyyy HH:mm");
 		sfd1.setLenient(false);
 		this.schedule = sfd1.parse(data.schedule());
-		System.out.println(this.schedule);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(schedule);
 		this.hourFinal = calendar.get(Calendar.HOUR)+DURATION;
 	}
 	
-	public void validateScheduling() throws InvalidSchedulingException, MinimumThirtyMinuteNoticeException{
+	public Calendar getCalendar(Date date){
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(this.schedule);
-		Calendar currentCalendar = Calendar.getInstance();
+		calendar.setTime(date);
+		return calendar;
+	}
+
+	public void validateScheduling() throws InvalidSchedulingException, MinimumThirtyMinuteNoticeException{
+		Calendar calendar = getCalendar(this.schedule);
+		Calendar currentCalendar = getCalendar(new Date());
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		int minute = calendar.get(Calendar.MINUTE);
 		int currentHour = currentCalendar.get(Calendar.HOUR_OF_DAY);
@@ -54,8 +59,15 @@ public class Scheduling {
 			|| calendar.get(Calendar.YEAR)>currentCalendar.get(Calendar.YEAR)+1)
 			throw new InvalidSchedulingException();
 		if((currentHour == hour && (minute - currentMinute)<30)
-			||(currentHour==(hour-1) && (minute-currentMinute)>-30))
+			||(currentHour==(hour-1) && ((60-currentMinute)+minute)<30))
 			throw new MinimumThirtyMinuteNoticeException();
+	}
+	public void ValidateCancellation() throws MinimumTwentyFourHourNoticeException{
+		Calendar calendar = getCalendar(this.schedule);
+		Calendar currentCalendar = getCalendar(new Date());
+		if(schedule.compareTo(new Date())==0
+			||(schedule.compareTo(new Date())==1 && (currentCalendar.get(Calendar.HOUR_OF_DAY)-calendar.get(Calendar.HOUR_OF_DAY))<0))
+			throw new MinimumTwentyFourHourNoticeException();
 	}
 	public boolean compareDate(Scheduling scheduling) {
 		Calendar calendar = Calendar.getInstance();

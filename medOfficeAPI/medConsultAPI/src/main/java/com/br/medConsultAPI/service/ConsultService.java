@@ -24,6 +24,7 @@ import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultAtTimeE
 import com.br.medConsultAPI.exceptions.DoctorNotFoundException;
 import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
 import com.br.medConsultAPI.exceptions.MinimumThirtyMinuteNoticeException;
+import com.br.medConsultAPI.exceptions.MinimumTwentyFourHourNoticeException;
 import com.br.medConsultAPI.exceptions.NoDoctorAvailableException;
 import com.br.medConsultAPI.exceptions.PatientNotFoundException;
 import com.br.medConsultAPI.exceptions.PatientOnlyHaveOneConsultPerDayException;
@@ -131,10 +132,11 @@ public class ConsultService {
 	
 	
 
-	public void cancel(Long id, String cancelReason) throws CancelReasonCannotBeNullException {
+	public void cancel(Long id, String cancelReason) throws CancelReasonCannotBeNullException, MinimumTwentyFourHourNoticeException {
 		if(cancelReason.isBlank())
 			throw new CancelReasonCannotBeNullException(); 
 		Consult consult = this.findConsultById(id);
+		consult.getScheduling().ValidateCancellation();
 		consult.setStatus(Status.CANCELLED);
 		consult.setCancelReason(cancelReason);
 		this.consultRepository.save(consult);

@@ -21,6 +21,7 @@ import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultAtTimeE
 import com.br.medConsultAPI.exceptions.DoctorNotFoundException;
 import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
 import com.br.medConsultAPI.exceptions.MinimumThirtyMinuteNoticeException;
+import com.br.medConsultAPI.exceptions.MinimumTwentyFourHourNoticeException;
 import com.br.medConsultAPI.exceptions.NoDoctorAvailableException;
 import com.br.medConsultAPI.exceptions.PatientNotFoundException;
 import com.br.medConsultAPI.exceptions.PatientOnlyHaveOneConsultPerDayException;
@@ -52,7 +53,7 @@ public class ConsultController {
 		return new ResponseEntity<ConsultData>(HttpStatus.ACCEPTED);
 	}
 	@DeleteMapping("/cancel")
-	public ResponseEntity<?> cancelConsult(@RequestBody Long id, @RequestBody String cancelReason){
+	public ResponseEntity<?> cancelConsult(@RequestBody Long id, @RequestBody String cancelReason) throws MinimumTwentyFourHourNoticeException{
 		try {
 			service.cancel(id, cancelReason);
 		} catch (CancelReasonCannotBeNullException e) {
