@@ -52,8 +52,8 @@ public class ConsultController {
 		service.update(id,data);
 		return new ResponseEntity<ConsultData>(HttpStatus.ACCEPTED);
 	}
-	@DeleteMapping("/cancel")
-	public ResponseEntity<?> cancelConsult(@RequestBody Long id, @RequestBody String cancelReason) throws MinimumTwentyFourHourNoticeException{
+	@DeleteMapping("/cancel/{id}")
+	public ResponseEntity<?> cancelConsult(@PathVariable Long id, @RequestBody String cancelReason) throws MinimumTwentyFourHourNoticeException{
 		try {
 			service.cancel(id, cancelReason);
 		} catch (CancelReasonCannotBeNullException e) {

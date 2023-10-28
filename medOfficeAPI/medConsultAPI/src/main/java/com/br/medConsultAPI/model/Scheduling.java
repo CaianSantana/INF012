@@ -58,7 +58,7 @@ public class Scheduling {
 			|| calendar.get(Calendar.YEAR)<currentCalendar.get(Calendar.YEAR)
 			|| calendar.get(Calendar.YEAR)>currentCalendar.get(Calendar.YEAR)+1)
 			throw new InvalidSchedulingException();
-		if((currentHour == hour && (minute - currentMinute)<30)
+		if(((schedule.compareTo(new Date())==0) && currentHour == hour && (minute - currentMinute)<30)
 			||(currentHour==(hour-1) && ((60-currentMinute)+minute)<30))
 			throw new MinimumThirtyMinuteNoticeException();
 	}
