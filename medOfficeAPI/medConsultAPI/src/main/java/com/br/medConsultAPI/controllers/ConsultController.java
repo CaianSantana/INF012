@@ -1,10 +1,12 @@
 package com.br.medConsultAPI.controllers;
 
+import java.text.ParseException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +19,6 @@ import com.br.medConsultAPI.dtos.FormConsult;
 import com.br.medConsultAPI.exceptions.CancelReasonCannotBeNullException;
 import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultAtTimeException;
 import com.br.medConsultAPI.exceptions.DoctorNotFoundException;
-import com.br.medConsultAPI.exceptions.InvalidDataException;
-import com.br.medConsultAPI.exceptions.InvalidHourException;
 import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
 import com.br.medConsultAPI.exceptions.MinimumThirtyMinuteNoticeException;
 import com.br.medConsultAPI.exceptions.NoDoctorAvailableException;
@@ -37,33 +37,13 @@ public class ConsultController {
 		return service.listAllConsults();
 	}
 
-
+	@ExceptionHandler(ParseException.class)
 	@PostMapping
-	public ResponseEntity<ConsultData> scheduleConsult(@RequestBody FormConsult data) throws InvalidDataException, InvalidHourException, 
-	PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultAtTimeException, NoDoctorAvailableException, 
-	InvalidSchedulingException, MinimumThirtyMinuteNoticeException, PatientNotFoundException, DoctorNotFoundException{
+	public ResponseEntity<ConsultData> scheduleConsult(@RequestBody FormConsult data) throws PatientOnlyHaveOneConsultPerDayException, 
+	DoctorCannotHaveMoreThanOneConsultAtTimeException, NoDoctorAvailableException, InvalidSchedulingException,
+	MinimumThirtyMinuteNoticeException, PatientNotFoundException, DoctorNotFoundException, ParseException{
 		Consult consult;
-		try {
-			consult = service.register(data);
-		} catch (DoctorNotFoundException e) {
-			throw new DoctorNotFoundException();
-		} catch (PatientNotFoundException e) {
-			throw new PatientNotFoundException();
-		} catch (InvalidDataException e) {
-			throw new InvalidDataException();
-		} catch(InvalidHourException e){
-			throw new InvalidHourException();
-		} catch(PatientOnlyHaveOneConsultPerDayException e){
-			throw new PatientOnlyHaveOneConsultPerDayException();
-		} catch(DoctorCannotHaveMoreThanOneConsultAtTimeException e){
-			throw new DoctorCannotHaveMoreThanOneConsultAtTimeException();
-		} catch(NoDoctorAvailableException e){
-			throw new NoDoctorAvailableException();
-		} catch(InvalidSchedulingException e){
-			throw new InvalidSchedulingException();
-		} catch(MinimumThirtyMinuteNoticeException e){
-			throw new MinimumThirtyMinuteNoticeException();
-		}
+		consult = service.register(data);
 		return new ResponseEntity<ConsultData>(new ConsultData(consult), HttpStatus.CREATED);
 	}
 	@PutMapping("/{id}")

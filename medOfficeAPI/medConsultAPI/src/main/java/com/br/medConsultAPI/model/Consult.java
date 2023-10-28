@@ -1,11 +1,14 @@
 package com.br.medConsultAPI.model;
 
+import java.text.ParseException;
+import java.util.List;
+
 import com.br.medConsultAPI.dtos.FormConsult;
 import com.br.medConsultAPI.enums.Status;
-import com.br.medConsultAPI.exceptions.InvalidDataException;
-import com.br.medConsultAPI.exceptions.InvalidHourException;
+import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultAtTimeException;
 import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
 import com.br.medConsultAPI.exceptions.MinimumThirtyMinuteNoticeException;
+import com.br.medConsultAPI.exceptions.PatientOnlyHaveOneConsultPerDayException;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -38,7 +41,7 @@ public class Consult {
 		this.status = Status.SCHEDULED;
 		this.cancelReason = null;
 	}
-	public Consult(FormConsult data) {
+	public Consult(FormConsult data) throws ParseException {
 		this.crm = data.crm();
 		this.cpf = data.cpf();
 		this.scheduling = new Scheduling(data.scheduling());
@@ -46,9 +49,17 @@ public class Consult {
 		this.cancelReason = null;
 	}
 	
-	public void validateConsult() throws  InvalidSchedulingException, MinimumThirtyMinuteNoticeException, InvalidDataException, InvalidHourException{
-		this.scheduling.dateValidation();
-		this.scheduling.hourValidation();
-		this.scheduling.consultTimeValidation();
+	public void validateConsult(List<Consult> list) throws  InvalidSchedulingException, MinimumThirtyMinuteNoticeException, PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultAtTimeException{
+		this.scheduling.validateScheduling();
+		for(Consult item: list) {
+			if(item.getCpf().equalsIgnoreCase(this.getCpf())
+					&&item.getScheduling().compareDate(this.getScheduling())) {
+				throw new PatientOnlyHaveOneConsultPerDayException();
+			}
+			if(item.getCrm().equalsIgnoreCase(this.getCrm())
+					&&item.getScheduling().compareAll(this.getScheduling())) {
+				throw new DoctorCannotHaveMoreThanOneConsultAtTimeException();
+			}
+			}
 	}
 }
