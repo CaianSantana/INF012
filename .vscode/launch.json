@@ -1,0 +1,56 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "DoctorApiApplication",
+            "request": "launch",
+            "mainClass": "com.br.doctorAPI.DoctorApiApplication",
+            "projectName": "doctorAPI"
+        },
+        {
+            "type": "java",
+            "name": "EurekaApplication",
+            "request": "launch",
+            "mainClass": "com.br.eureka.EurekaApplication",
+            "projectName": "eureka"
+        },
+        {
+            "type": "java",
+            "name": "GatewayApplication",
+            "request": "launch",
+            "mainClass": "com.br.gateway.GatewayApplication",
+            "projectName": "gateway"
+        },
+        {
+            "type": "java",
+            "name": "MedConsultApiApplication",
+            "request": "launch",
+            "mainClass": "com.br.medConsultAPI.MedConsultApiApplication",
+            "projectName": "medConsultAPI"
+        },
+        {
+            "type": "java",
+            "name": "PatientApiApplication",
+            "request": "launch",
+            "mainClass": "com.br.patientAPI.PatientApiApplication",
+            "projectName": "patientAPI"
+        },
+        {
+            "type": "java",
+            "name": "TesteApplication",
+            "request": "launch",
+            "mainClass": "edu.br.teste.TesteApplication",
+            "projectName": "teste"
+        }
+    ]
+}

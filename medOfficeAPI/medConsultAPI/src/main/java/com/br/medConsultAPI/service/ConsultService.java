@@ -1,5 +1,6 @@
 package com.br.medConsultAPI.service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,8 +22,6 @@ import com.br.medConsultAPI.enums.Status;
 import com.br.medConsultAPI.exceptions.CancelReasonCannotBeNullException;
 import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultAtTimeException;
 import com.br.medConsultAPI.exceptions.DoctorNotFoundException;
-import com.br.medConsultAPI.exceptions.InvalidDataException;
-import com.br.medConsultAPI.exceptions.InvalidHourException;
 import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
 import com.br.medConsultAPI.exceptions.MinimumThirtyMinuteNoticeException;
 import com.br.medConsultAPI.exceptions.NoDoctorAvailableException;
@@ -66,7 +65,7 @@ public class ConsultService {
 		for(int i=0; i<docList.size(); i++) {
 			for(Consult item: consultList) {
 				if(item.getCrm() == docList.get(i).crm()
-						&&!item.getScheduling().compareDate(consult.getScheduling())||!item.getScheduling().compareTime(consult.getScheduling())) {
+						&&!item.getScheduling().compareDate(consult.getScheduling())||!item.getScheduling().compareAll(consult.getScheduling())) {
 						return docList.get(i).crm();
 					}
 			}
@@ -116,27 +115,16 @@ public class ConsultService {
         return new ResponseEntity<PatientData>(patient, HttpStatus.ACCEPTED);
     }
 
-	public Consult register(FormConsult data) throws DoctorNotFoundException, PatientNotFoundException, InvalidDataException, InvalidHourException, 
-	PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultAtTimeException, NoDoctorAvailableException, InvalidSchedulingException, MinimumThirtyMinuteNoticeException {
+	public Consult register(FormConsult data) throws DoctorNotFoundException, PatientNotFoundException,
+	PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultAtTimeException, NoDoctorAvailableException, InvalidSchedulingException, MinimumThirtyMinuteNoticeException, ParseException {
 		Consult consult = new Consult(data);
-		consult.validateConsult();
+		consult.validateConsult(this.consultRepository.findAll());
 		if(data.crm() ==null) {
 			consult.setCrm((getRandomDoctor(consult)));
 		}else if(this.findDoctorByCrm(data.crm()) == null)
 			throw new DoctorNotFoundException();
 		if(this.findPatientByCpf(data.cpf())==null)	
 			throw new PatientNotFoundException();
-		for(Consult item: this.consultRepository.findAll()) {
-			if(item.getCpf().equalsIgnoreCase(consult.getCpf())
-					&&item.getScheduling().compareDate(consult.getScheduling())) {
-				throw new PatientOnlyHaveOneConsultPerDayException();
-			}
-			if(item.getCrm().equalsIgnoreCase(consult.getCrm())
-					&&item.getScheduling().compareDate(consult.getScheduling())
-					&&item.getScheduling().compareTime(consult.getScheduling())) {
-				throw new DoctorCannotHaveMoreThanOneConsultAtTimeException();
-			}
-			}
 		this.consultRepository.save(consult);
 		return consult;
 	}
@@ -151,7 +139,7 @@ public class ConsultService {
 		consult.setCancelReason(cancelReason);
 		this.consultRepository.save(consult);
 	}
-	public void update(Long id, FormConsult data) {
+	public void update(Long id, FormConsult data) throws ParseException {
 			Consult consult = this.findConsultById(id);
 			Scheduling scheduling = new Scheduling(data.scheduling());
 			consult.setCrm(data.crm());
