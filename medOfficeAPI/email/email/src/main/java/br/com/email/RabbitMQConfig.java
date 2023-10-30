@@ -1,6 +1,8 @@
-package com.br.medConsultAPI;
-
+package br.com.email;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -10,15 +12,22 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
 @Configuration
 public class RabbitMQConfig {
-
+    
+        
     @Bean
-    public FanoutExchange fanoutExchange(){
-        return new FanoutExchange("medConsultAPI.v1.consult-scheduled");
+    public Queue queue(){
+        return new Queue("medConsultAPI.v1.consult-scheduled.send-email");
     }
 
+    @Bean
+    public Binding binding(){
+        Queue queue = new Queue("medConsultAPI.v1.consult-scheduled.send-email");
+        FanoutExchange exchange = new FanoutExchange("medConsultAPI.v1.consult-scheduled");
+        return BindingBuilder.bind(queue).to(exchange);
+    }
+    
     @Bean
     public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory){
         return new RabbitAdmin(connectionFactory);
@@ -38,7 +47,8 @@ public class RabbitMQConfig {
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory,
     Jackson2JsonMessageConverter messageConverter){
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(messageConverter);
+        rabbitTemplate.getMessageConverter();
         return rabbitTemplate;
     }
+
 }

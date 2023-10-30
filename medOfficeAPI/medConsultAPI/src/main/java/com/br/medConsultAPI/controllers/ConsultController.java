@@ -2,6 +2,8 @@ package com.br.medConsultAPI.controllers;
 
 import java.text.ParseException;
 import java.util.List;
+
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,9 @@ import com.br.medConsultAPI.service.ConsultService;
 public class ConsultController {
 	@Autowired
 	private ConsultService service;
+	@Autowired
+	private RabbitTemplate rabbitTemplate;
+
 	@GetMapping
 	public List<ConsultData> listAllConsults(){
 		return service.listAllConsults();
@@ -45,7 +50,9 @@ public class ConsultController {
 	MinimumThirtyMinuteNoticeException, PatientNotFoundException, DoctorNotFoundException, ParseException{
 		Consult consult;
 		consult = service.register(data);
-		return new ResponseEntity<ConsultData>(new ConsultData(consult), HttpStatus.CREATED);
+		ConsultData consultData = new ConsultData(consult);
+		rabbitTemplate.convertAndSend("medConsultAPI.v1.consult-scheduled", null, consultData);
+		return new ResponseEntity<ConsultData>(consultData, HttpStatus.CREATED);
 	}
 	@PutMapping("/{id}")
 	public ResponseEntity<ConsultData> updateConsult(@PathVariable Long id, @RequestBody FormConsult data) throws Exception{
