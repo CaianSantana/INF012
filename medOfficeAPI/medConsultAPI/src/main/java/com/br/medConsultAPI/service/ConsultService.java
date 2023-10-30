@@ -4,13 +4,11 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.br.medConsultAPI.clients.DoctorClient;
 import com.br.medConsultAPI.clients.DoctorData;
@@ -74,8 +72,12 @@ public class ConsultService {
 		throw new NoDoctorAvailableException();
 	}
 	
-	public List<ConsultData> converterLista(List<Consult> lista){
-		return lista.stream().map(ConsultData::new).collect(Collectors.toList());
+	public List<ConsultData> converterLista(List<Consult> list){
+		List<ConsultData> listDTO = new LinkedList<ConsultData>();
+		for(Consult item: list){
+			listDTO.add(new ConsultData(item, findDoctorByCrm(item.getCrm()), findPatientByCpf(item.getCpf())));
+		}
+		return listDTO;
 	}
 
 	public List<ConsultData> listAllConsults(){
@@ -99,21 +101,21 @@ public class ConsultService {
             doctorMap.put(item.crm(), item);
         return list;
     }
-	public ResponseEntity<DoctorData> findDoctorByCrm(String crm){
+	public DoctorData findDoctorByCrm(String crm){
         DoctorData doctor = doctorMap.get(crm);
         if(doctor == null){
             doctor = doctorClient.findDoctorByCrm(crm);
             doctorMap.put(crm, doctor);
         } 
-        return new ResponseEntity<DoctorData>(doctor, HttpStatus.ACCEPTED);
+        return doctor;
     }
-	public ResponseEntity<PatientData> findPatientByCpf(String cpf){
+	public PatientData findPatientByCpf(String cpf){
         PatientData patient = patientMap.get(cpf);
         if(patient == null){
             patient = patientClient.findPatientByCpf(cpf);
             patientMap.put(cpf, patient);
         }
-        return new ResponseEntity<PatientData>(patient, HttpStatus.ACCEPTED);
+        return patient;
     }
 
 	public Consult register(FormConsult data) throws DoctorNotFoundException, PatientNotFoundException,

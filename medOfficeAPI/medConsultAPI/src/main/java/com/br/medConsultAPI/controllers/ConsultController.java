@@ -50,7 +50,7 @@ public class ConsultController {
 	MinimumThirtyMinuteNoticeException, PatientNotFoundException, DoctorNotFoundException, ParseException{
 		Consult consult;
 		consult = service.register(data);
-		ConsultData consultData = new ConsultData(consult);
+		ConsultData consultData = new ConsultData(consult, service.findDoctorByCrm(consult.getCrm()), service.findPatientByCpf(consult.getCpf()));
 		rabbitTemplate.convertAndSend("medConsultAPI.v1.consult-scheduled", null, consultData);
 		return new ResponseEntity<ConsultData>(consultData, HttpStatus.CREATED);
 	}
