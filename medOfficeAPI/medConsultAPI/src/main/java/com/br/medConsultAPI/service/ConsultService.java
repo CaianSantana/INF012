@@ -18,6 +18,7 @@ import com.br.medConsultAPI.dtos.ConsultData;
 import com.br.medConsultAPI.dtos.FormConsult;
 import com.br.medConsultAPI.enums.Status;
 import com.br.medConsultAPI.exceptions.CancelReasonCannotBeNullException;
+import com.br.medConsultAPI.exceptions.CannotScheduleToThePastException;
 import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultAtTimeException;
 import com.br.medConsultAPI.exceptions.DoctorNotFoundException;
 import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
@@ -119,7 +120,7 @@ public class ConsultService {
     }
 
 	public Consult register(FormConsult data) throws DoctorNotFoundException, PatientNotFoundException,
-	PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultAtTimeException, NoDoctorAvailableException, InvalidSchedulingException, MinimumThirtyMinuteNoticeException, ParseException {
+	PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultAtTimeException, NoDoctorAvailableException, InvalidSchedulingException, MinimumThirtyMinuteNoticeException, ParseException, CannotScheduleToThePastException {
 		Consult consult = new Consult(data);
 		consult.validateConsult(this.consultRepository.findAll());
 		if(data.crm() ==null) {

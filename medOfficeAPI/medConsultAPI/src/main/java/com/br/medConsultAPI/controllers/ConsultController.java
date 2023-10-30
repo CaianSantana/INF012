@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.br.medConsultAPI.dtos.ConsultData;
 import com.br.medConsultAPI.dtos.FormConsult;
 import com.br.medConsultAPI.exceptions.CancelReasonCannotBeNullException;
+import com.br.medConsultAPI.exceptions.CannotScheduleToThePastException;
 import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultAtTimeException;
 import com.br.medConsultAPI.exceptions.DoctorNotFoundException;
 import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
@@ -47,7 +48,7 @@ public class ConsultController {
 	@PostMapping
 	public ResponseEntity<ConsultData> scheduleConsult(@RequestBody FormConsult data) throws PatientOnlyHaveOneConsultPerDayException, 
 	DoctorCannotHaveMoreThanOneConsultAtTimeException, NoDoctorAvailableException, InvalidSchedulingException,
-	MinimumThirtyMinuteNoticeException, PatientNotFoundException, DoctorNotFoundException, ParseException{
+	MinimumThirtyMinuteNoticeException, PatientNotFoundException, DoctorNotFoundException, ParseException, CannotScheduleToThePastException{
 		Consult consult;
 		consult = service.register(data);
 		ConsultData consultData = new ConsultData(consult, service.findDoctorByCrm(consult.getCrm()), service.findPatientByCpf(consult.getCpf()));
