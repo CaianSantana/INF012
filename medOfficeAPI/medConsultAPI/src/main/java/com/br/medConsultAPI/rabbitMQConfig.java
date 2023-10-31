@@ -20,6 +20,11 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public FanoutExchange fanoutExchangeDLX(){
+        return new FanoutExchange("medConsultAPI.v1.consult-scheduled.dlx");
+    }
+
+    @Bean
     public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory){
         return new RabbitAdmin(connectionFactory);
     }

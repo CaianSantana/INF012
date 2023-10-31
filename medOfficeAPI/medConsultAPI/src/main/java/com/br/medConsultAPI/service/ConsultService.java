@@ -1,8 +1,8 @@
 package com.br.medConsultAPI.service;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;

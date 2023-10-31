@@ -1,4 +1,7 @@
 package br.com.email;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.FanoutExchange;
@@ -18,13 +21,27 @@ public class RabbitMQConfig {
         
     @Bean
     public Queue queue(){
-        return new Queue("medConsultAPI.v1.consult-scheduled.send-email");
+        Map<String, Object> args = new HashMap<>();
+        args.put("x-dead-letter-exchange", "medConsultAPI.v1.consult-scheduled.dlx");
+        return new Queue("medConsultAPI.v1.consult-scheduled.send-email", true, false, false, args);
     }
 
     @Bean
     public Binding binding(){
-        Queue queue = new Queue("medConsultAPI.v1.consult-scheduled.send-email");
+        Queue queue = queue();
         FanoutExchange exchange = new FanoutExchange("medConsultAPI.v1.consult-scheduled");
+        return BindingBuilder.bind(queue).to(exchange);
+    }
+
+    @Bean
+    public Queue queueDLQ(){
+        return new Queue("medConsultAPI.v1.consult-scheduled.dlx.send-email.dlq");
+    }
+
+    @Bean
+    public Binding bindingDLQ(){
+        Queue queue = queueDLQ();
+        FanoutExchange exchange = new FanoutExchange("medConsultAPI.v1.consult-scheduled.dlx");
         return BindingBuilder.bind(queue).to(exchange);
     }
     
