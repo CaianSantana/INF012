@@ -48,7 +48,7 @@ public class DeadLetterQueueListener {
             };
 
             System.out.println("Reenviando os emails da consulta de id: "+dto.id());
-            this.rabbitTemplate.convertAndSend(DLQ, dto, messagePostProcessor);
+            this.rabbitTemplate.convertAndSend(DLQ, null, dto, messagePostProcessor);
         }
     }
 }
