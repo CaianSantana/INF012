@@ -28,7 +28,7 @@ public class RabbitMQConfig {
 
     @Bean
     public Binding binding(){
-        Queue queue = queue();
+        Queue queue = new Queue("medConsultAPI.v1.consult-scheduled.send-email");
         FanoutExchange exchange = new FanoutExchange("medConsultAPI.v1.consult-scheduled");
         return BindingBuilder.bind(queue).to(exchange);
     }
@@ -64,7 +64,7 @@ public class RabbitMQConfig {
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory,
     Jackson2JsonMessageConverter messageConverter){
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.getMessageConverter();
+        rabbitTemplate.setMessageConverter(messageConverter);
         return rabbitTemplate;
     }
 
