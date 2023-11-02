@@ -2,6 +2,8 @@ package com.br.medConsultAPI.controllers;
 
 import java.text.ParseException;
 import java.util.List;
+
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.br.medConsultAPI.dtos.ConsultData;
 import com.br.medConsultAPI.dtos.FormConsult;
 import com.br.medConsultAPI.exceptions.CancelReasonCannotBeNullException;
+import com.br.medConsultAPI.exceptions.CannotScheduleToThePastException;
 import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultAtTimeException;
 import com.br.medConsultAPI.exceptions.DoctorNotFoundException;
 import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
@@ -33,6 +36,9 @@ import com.br.medConsultAPI.service.ConsultService;
 public class ConsultController {
 	@Autowired
 	private ConsultService service;
+	@Autowired
+	private RabbitTemplate rabbitTemplate;
+
 	@GetMapping
 	public List<ConsultData> listAllConsults(){
 		return service.listAllConsults();
@@ -42,10 +48,12 @@ public class ConsultController {
 	@PostMapping
 	public ResponseEntity<ConsultData> scheduleConsult(@RequestBody FormConsult data) throws PatientOnlyHaveOneConsultPerDayException, 
 	DoctorCannotHaveMoreThanOneConsultAtTimeException, NoDoctorAvailableException, InvalidSchedulingException,
-	MinimumThirtyMinuteNoticeException, PatientNotFoundException, DoctorNotFoundException, ParseException{
+	MinimumThirtyMinuteNoticeException, PatientNotFoundException, DoctorNotFoundException, ParseException, CannotScheduleToThePastException{
 		Consult consult;
 		consult = service.register(data);
-		return new ResponseEntity<ConsultData>(new ConsultData(consult), HttpStatus.CREATED);
+		ConsultData consultData = new ConsultData(consult, service.findDoctorByCrm(consult.getCrm()), service.findPatientByCpf(consult.getCpf()));
+		rabbitTemplate.convertAndSend("medConsultAPI.v1.consult-scheduled", null, consultData);
+		return new ResponseEntity<ConsultData>(consultData, HttpStatus.CREATED);
 	}
 	@PutMapping("/{id}")
 	public ResponseEntity<ConsultData> updateConsult(@PathVariable Long id, @RequestBody FormConsult data) throws Exception{

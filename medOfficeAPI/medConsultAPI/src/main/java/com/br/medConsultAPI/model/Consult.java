@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.br.medConsultAPI.dtos.FormConsult;
 import com.br.medConsultAPI.enums.Status;
+import com.br.medConsultAPI.exceptions.CannotScheduleToThePastException;
 import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultAtTimeException;
 import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
 import com.br.medConsultAPI.exceptions.MinimumThirtyMinuteNoticeException;
@@ -49,7 +50,7 @@ public class Consult {
 		this.cancelReason = null;
 	}
 	
-	public void validateConsult(List<Consult> list) throws  InvalidSchedulingException, MinimumThirtyMinuteNoticeException, PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultAtTimeException{
+	public void validateConsult(List<Consult> list) throws  InvalidSchedulingException, MinimumThirtyMinuteNoticeException, PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultAtTimeException, CannotScheduleToThePastException{
 		this.scheduling.validateScheduling();
 		for(Consult item: list) {
 			if(item.getCpf().equalsIgnoreCase(this.getCpf())

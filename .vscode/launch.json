@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "EmailApplication",
+            "request": "launch",
+            "mainClass": "br.com.email.EmailApplication",
+            "projectName": "email"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"

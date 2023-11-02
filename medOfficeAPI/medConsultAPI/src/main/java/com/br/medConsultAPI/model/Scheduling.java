@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.br.medConsultAPI.dtos.FormScheduling;
+import com.br.medConsultAPI.exceptions.CannotScheduleToThePastException;
 import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
 import com.br.medConsultAPI.exceptions.MinimumThirtyMinuteNoticeException;
 import com.br.medConsultAPI.exceptions.MinimumTwentyFourHourNoticeException;
@@ -46,13 +47,15 @@ public class Scheduling {
 		return calendar;
 	}
 
-	public void validateScheduling() throws InvalidSchedulingException, MinimumThirtyMinuteNoticeException{
+	public void validateScheduling() throws InvalidSchedulingException, MinimumThirtyMinuteNoticeException, CannotScheduleToThePastException{
 		Calendar calendar = getCalendar(this.schedule);
 		Calendar currentCalendar = getCalendar(new Date());
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		int minute = calendar.get(Calendar.MINUTE);
 		int currentHour = currentCalendar.get(Calendar.HOUR_OF_DAY);
 		int currentMinute = currentCalendar.get(Calendar.MINUTE);
+		if(calendar.get(Calendar.DAY_OF_YEAR) < currentCalendar.get(Calendar.DAY_OF_YEAR))
+			throw new CannotScheduleToThePastException();
 		if(hour<7 || hour>18
 			|| calendar.get(Calendar.DAY_OF_WEEK) == 1
 			|| calendar.get(Calendar.YEAR)<currentCalendar.get(Calendar.YEAR)
