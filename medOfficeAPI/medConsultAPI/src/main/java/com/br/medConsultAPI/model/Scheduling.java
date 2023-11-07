@@ -54,22 +54,26 @@ public class Scheduling {
 		int minute = calendar.get(Calendar.MINUTE);
 		int currentHour = currentCalendar.get(Calendar.HOUR_OF_DAY);
 		int currentMinute = currentCalendar.get(Calendar.MINUTE);
-		if(calendar.get(Calendar.DAY_OF_YEAR) < currentCalendar.get(Calendar.DAY_OF_YEAR))
+		if(this.schedule.before(new Date()))
 			throw new CannotScheduleToThePastException();
 		if(hour<7 || hour>18
 			|| calendar.get(Calendar.DAY_OF_WEEK) == 1
 			|| calendar.get(Calendar.YEAR)<currentCalendar.get(Calendar.YEAR)
 			|| calendar.get(Calendar.YEAR)>currentCalendar.get(Calendar.YEAR)+1)
 			throw new InvalidSchedulingException();
-		if(((schedule.compareTo(new Date())==0) && currentHour == hour && (minute - currentMinute)<30)
+		System.out.println((calendar.get(Calendar.DAY_OF_YEAR) == currentCalendar.get(Calendar.DAY_OF_YEAR)));
+		System.out.println(currentHour == hour);
+		System.out.println((minute - currentMinute)<30);
+		System.out.println(currentHour==(hour-1));
+		System.out.println(((60-currentMinute)+minute)<30);
+		if((calendar.get(Calendar.DAY_OF_YEAR) == currentCalendar.get(Calendar.DAY_OF_YEAR) && currentHour == hour && (minute - currentMinute)<30)
 			||(currentHour==(hour-1) && ((60-currentMinute)+minute)<30))
 			throw new MinimumThirtyMinuteNoticeException();
 	}
 	public void ValidateCancellation() throws MinimumTwentyFourHourNoticeException{
 		Calendar calendar = getCalendar(this.schedule);
 		Calendar currentCalendar = getCalendar(new Date());
-		if(schedule.compareTo(new Date())==0
-			||(schedule.compareTo(new Date())==1 && (currentCalendar.get(Calendar.HOUR_OF_DAY)-calendar.get(Calendar.HOUR_OF_DAY))<0))
+		if(calendar.get(Calendar.DAY_OF_YEAR) - currentCalendar.get(Calendar.DAY_OF_YEAR)<=1)
 			throw new MinimumTwentyFourHourNoticeException();
 	}
 	public boolean compareDate(Scheduling scheduling) {

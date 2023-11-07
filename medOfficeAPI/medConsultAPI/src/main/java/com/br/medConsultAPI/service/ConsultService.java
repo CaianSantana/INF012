@@ -3,10 +3,7 @@ package com.br.medConsultAPI.service;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,10 +40,6 @@ public class ConsultService {
     @Autowired
     ConsultRepository consultRepository;
 
-	public Map<String, DoctorData> doctorMap= new HashMap<String, DoctorData>();;
-    public Map<String, PatientData> patientMap= new HashMap<String, PatientData>();
-    public Map<Long, Consult> consultMap= new HashMap<Long, Consult>();
-
 	public boolean isCancelled(Consult consult) {
 		if(consult.getStatus() == Status.CANCELLED)
         	return true;
@@ -74,7 +67,7 @@ public class ConsultService {
 	}
 	
 	public List<ConsultData> converterLista(List<Consult> list){
-		List<ConsultData> listDTO = new LinkedList<ConsultData>();
+		List<ConsultData> listDTO = new ArrayList<ConsultData>();
 		for(Consult item: list){
 			listDTO.add(new ConsultData(item, findDoctorByCrm(item.getCrm()), findPatientByCpf(item.getCpf())));
 		}
@@ -83,39 +76,27 @@ public class ConsultService {
 
 	public List<ConsultData> listAllConsults(){
 		List<Consult> list = new ArrayList<Consult>();
-		list.addAll(this.consultRepository.findAll());
+		for(Consult item: this.consultRepository.findAll())
+			if(!this.isCancelled(item))
+				list.add(item);
 		return this.converterLista(list);
 	}
 	public Consult findConsultById(Long id){
-        Consult consult = consultMap.get(id);
-        if(consult == null )
-            consult = this.consultRepository.findById(id).get();           
-        if(this.consultRepository.findById(id).isEmpty() || this.isCancelled(consult))
+        Consult consult = this.consultRepository.findById(id).orElseThrow(() ->new NoSuchElementException());
+        if(this.isCancelled(consult))
 			throw new NoSuchElementException();
-        consultMap.put(id, consult);
 		return consult;
     }
 	public List<DoctorData> findAllDoctors() {
         List<DoctorData> list = doctorClient.findAllDoctors(0);
-        doctorMap.clear();
-        for(DoctorData item: list)
-            doctorMap.put(item.crm(), item);
         return list;
     }
 	public DoctorData findDoctorByCrm(String crm){
-        DoctorData doctor = doctorMap.get(crm);
-        if(doctor == null){
-            doctor = doctorClient.findDoctorByCrm(crm);
-            doctorMap.put(crm, doctor);
-        } 
+        DoctorData doctor = doctorClient.findDoctorByCrm(crm);
         return doctor;
     }
 	public PatientData findPatientByCpf(String cpf){
-        PatientData patient = patientMap.get(cpf);
-        if(patient == null){
-            patient = patientClient.findPatientByCpf(cpf);
-            patientMap.put(cpf, patient);
-        }
+        PatientData patient = patientClient.findPatientByCpf(cpf);
         return patient;
     }
 
