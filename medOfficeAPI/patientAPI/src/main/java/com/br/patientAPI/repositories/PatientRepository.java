@@ -11,6 +11,6 @@ import com.br.patientAPI.models.Patient;
 
 public interface PatientRepository extends JpaRepository<Patient, Long> {
 	Optional<Patient> findById(Long id);
-	Patient findByCpfContaining(String cpf);
+	Optional<Patient> findByCpfContaining(String cpf);
 	Page<Patient>findAllByStatus(Status status, Pageable pageable);
 }

@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.br.doctorAPI.dtos.DoctorData;
 import com.br.doctorAPI.dtos.FormDoctor;
 import com.br.doctorAPI.exception.CrmAlreadyExistsException;
-import com.br.doctorAPI.exception.DoctorNotFoundException;
 import com.br.doctorAPI.exception.NullValuesException;
 import com.br.doctorAPI.exception.OperationNotAllowedException;
 import com.br.doctorAPI.models.Doctor;
@@ -43,11 +42,11 @@ public class DoctorController {
 	}
 	
 	@GetMapping("/findByCrm")
-	public DoctorData findDoctorBycrm(String crm) throws DoctorNotFoundException{
+	public DoctorData findDoctorBycrm(String crm) {
 		return doctorService.findByCrm(crm);
 	}
 	@GetMapping("/findById/{id}")
-	public DoctorData findDoctorById(@PathVariable Long id) throws DoctorNotFoundException{
+	public DoctorData findDoctorById(@PathVariable Long id) {
 		return doctorService.findById(id);
 	}
 	

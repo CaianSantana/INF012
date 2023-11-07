@@ -2,6 +2,7 @@ package com.br.patientAPI.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +13,6 @@ import com.br.patientAPI.enums.Status;
 import com.br.patientAPI.exceptions.CpfAlreadyExistsException;
 import com.br.patientAPI.exceptions.NullValueException;
 import com.br.patientAPI.exceptions.OperationNotAllowedException;
-import com.br.patientAPI.exceptions.PatientNotFoundException;
 import com.br.patientAPI.models.Address;
 import com.br.patientAPI.models.Patient;
 import com.br.patientAPI.repositories.PatientRepository;
@@ -27,12 +27,6 @@ public class PatientService {
 	public List<PatientData> converterLista(List<Patient> lista){
 		return lista.stream().map(PatientData::new).collect(Collectors.toList());
 	}
-	public Boolean verifyStatus(Patient patient) {
-		if(patient.getStatus() == Status.ACTIVE) {
-			return true;
-		}
-		return false;
-	}
 	
 	public List<PatientData> listAll(Pageable pageable) {
         List<Patient > list = new ArrayList<Patient >();
@@ -42,18 +36,27 @@ public class PatientService {
 		return  this.converterLista(list);
     }
 
-	public PatientData findByCpf(String cpf) throws PatientNotFoundException{
-		Patient patient = this.patientRepository.findByCpfContaining(cpf);
-		if(patient == null || !verifyStatus(patient))
-			throw new PatientNotFoundException();
-		return new PatientData(patient);
-	}
-
-	public PatientData findById(Long id)throws PatientNotFoundException{
-		if(!verifyStatus(this.patientRepository.findById(id).get())) {
-			throw new PatientNotFoundException();
+	public PatientData findByCpf(String cpf){
+		try {
+			Patient patient = this.patientRepository.findByCpfContaining(cpf).get();
+			if(!patient.isActive())
+				return null;
+			return new PatientData(patient);
+		} catch (NoSuchElementException e) {
+			return null;
 		}
-		return new PatientData(this.patientRepository.findById(id).orElseThrow());
+	}
+	
+	public PatientData findById(Long id){
+		try {
+			Patient patient = this.patientRepository.findById(id).get();
+			if(!patient.isActive()) {
+				return null;
+			}
+			return new PatientData(patient);
+		} catch (NoSuchElementException e) {
+			return null;
+		}
 	}
 
 	

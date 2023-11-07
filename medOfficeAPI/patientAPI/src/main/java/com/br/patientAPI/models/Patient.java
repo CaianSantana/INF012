@@ -40,6 +40,12 @@ public class Patient implements HasNull {
 		this.status = Status.ACTIVE;
 	}
 
+	public Boolean isActive() {
+		if(this.status == Status.ACTIVE)
+			return true;
+		return false;
+	}
+
 	@Override
 	public boolean hasNull() {
 		if(this.getName()== null
@@ -50,5 +56,4 @@ public class Patient implements HasNull {
 		return false;
 	}
 
-	
 }

@@ -2,6 +2,7 @@ package com.br.doctorAPI.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +11,6 @@ import com.br.doctorAPI.dtos.DoctorData;
 import com.br.doctorAPI.dtos.FormDoctor;
 import com.br.doctorAPI.enums.Status;
 import com.br.doctorAPI.exception.CrmAlreadyExistsException;
-import com.br.doctorAPI.exception.DoctorNotFoundException;
 import com.br.doctorAPI.exception.NullValuesException;
 import com.br.doctorAPI.exception.OperationNotAllowedException;
 import com.br.doctorAPI.models.Address;
@@ -27,12 +27,7 @@ public class DoctorService {
 		return lista.stream().map(DoctorData::new).collect(Collectors.toList());
 	}
 	
-	public Boolean verifyStatus(Doctor doctor) {
-		if(doctor.getStatus() == Status.ACTIVE) {
-			return true;
-		}
-		return false;
-	}
+	
 	public List<DoctorData> listAll(Pageable pageable){
 		List<Doctor> list = new ArrayList<Doctor>();
 		for (Doctor doctor :  this.doctorRepository.findAllByStatus(pageable, Status.ACTIVE)) {
@@ -51,18 +46,27 @@ public class DoctorService {
 		return doctor;
 	}
 
-	public DoctorData findByCrm(String crm) throws DoctorNotFoundException {
-		Doctor doctor = this.doctorRepository.findByCrmContaining(crm);
-		if(!verifyStatus(doctor))
-			throw new DoctorNotFoundException();
-		return new DoctorData(doctor);
+	public DoctorData findByCrm(String crm){
+		try {
+			Doctor doctor = this.doctorRepository.findByCrmContaining(crm).get();
+			if(!doctor.isActive())
+				return null;
+			return new DoctorData(doctor);
+		} catch (NoSuchElementException e) {
+			return null;
+		}
 	}
 	
-	public DoctorData findById(Long id) throws DoctorNotFoundException{
-		if(!verifyStatus(this.doctorRepository.findById(id).get())) {
-			throw new DoctorNotFoundException();
+	public DoctorData findById(Long id){
+		try {
+			Doctor doctor = this.doctorRepository.findById(id).get();
+			if(!doctor.isActive()) {
+				return null;
+			}
+			return new DoctorData(doctor);
+		} catch (NoSuchElementException e) {
+			return null;
 		}
-		return new DoctorData(this.doctorRepository.findById(id).orElseThrow());
 	}
 	
 	public void erase(Long id) {

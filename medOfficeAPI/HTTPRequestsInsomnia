@@ -1,119 +1,10 @@
 _type: export
 __export_format: 4
-__export_date: 2023-10-28T19:56:45.869Z
+__export_date: 2023-11-07T20:40:55.846Z
 __export_source: insomnia.desktop.app:v8.3.0
 resources:
-  - _id: req_82686ddf7ace461590927af0c2e5551f
-    parentId: fld_112cfb1abc944ccfa43e6ce30d3350ad
-    modified: 1698522956221
-    created: 1698521668632
-    url: localhost:8082/consult-ms/Consults/cancel/2
-    name: DeleteConsult
-    description: ""
-    method: DELETE
-    body:
-      mimeType: application/json
-      text: |
-        [
-        	{
-        		"cancelReason": "batata"
-        	}
-        ]
-    parameters: []
-    headers:
-      - name: Content-Type
-        value: application/json
-      - name: User-Agent
-        value: insomnia/8.3.0
-    authentication: {}
-    metaSortKey: -1698161807881
-    isPrivate: false
-    settingStoreCookies: true
-    settingSendCookies: true
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: fld_112cfb1abc944ccfa43e6ce30d3350ad
-    parentId: wrk_75dc964df64e42c298f0b49abc1121b1
-    modified: 1698161793521
-    created: 1698161793521
-    name: Consults
-    description: ""
-    environment: {}
-    environmentPropertyOrder: null
-    metaSortKey: -1698161793521
-    _type: request_group
-  - _id: wrk_75dc964df64e42c298f0b49abc1121b1
-    parentId: null
-    modified: 1698335856762
-    created: 1698335856762
-    name: MedAppointHTTPRequests
-    description: ""
-    scope: design
-    _type: workspace
-  - _id: req_3d4d5954990c4ca9bcb080b002fc9bba
-    parentId: fld_112cfb1abc944ccfa43e6ce30d3350ad
-    modified: 1698161822608
-    created: 1698161797192
-    url: localhost:8082/consult-ms/Consults
-    name: GetAllConsults
-    description: ""
-    method: GET
-    body: {}
-    parameters: []
-    headers:
-      - name: User-Agent
-        value: insomnia/8.3.0
-    authentication: {}
-    metaSortKey: -1698161807781
-    isPrivate: false
-    settingStoreCookies: true
-    settingSendCookies: true
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: req_767219f0cb1c440cabe872fb09127d3f
-    parentId: fld_112cfb1abc944ccfa43e6ce30d3350ad
-    modified: 1698522919718
-    created: 1698161825273
-    url: localhost:8082/consult-ms/Consults
-    name: PostConsult
-    description: ""
-    method: POST
-    body:
-      mimeType: application/json
-      text: |-
-        
-        {
-        	"crm": "1113331",
-        	"cpf": "06600870571",
-        	"specialty": "CARDIOLOGIST",
-        	"scheduling":{
-        		"schedule": "10 28 2023 17:59"
-        	}
-        }
-    parameters: []
-    headers:
-      - name: Content-Type
-        value: application/json
-      - name: User-Agent
-        value: insomnia/8.3.0
-    authentication: {}
-    metaSortKey: -1698161807681
-    isPrivate: false
-    settingStoreCookies: true
-    settingSendCookies: true
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: req_8a0385d6844c4b0c8bfc71094c02b13d
-    parentId: fld_a6d266982cea43e68e4dd608bb570249
+  - _id: req_81afcebccf074aea96abf72173f3011f
+    parentId: fld_2ca268d81f8d46a6a15fd2b7904c70b2
     modified: 1698345187525
     created: 1696380947597
     url: localhost:8082/patient-ms/patients/findAll/0
@@ -135,8 +26,8 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: fld_a6d266982cea43e68e4dd608bb570249
-    parentId: wrk_75dc964df64e42c298f0b49abc1121b1
+  - _id: fld_2ca268d81f8d46a6a15fd2b7904c70b2
+    parentId: wrk_scratchpad
     modified: 1696381025596
     created: 1696381025596
     name: Patients
@@ -145,8 +36,16 @@ resources:
     environmentPropertyOrder: null
     metaSortKey: -1696381025596
     _type: request_group
-  - _id: req_0e408c3ab163446baf6f3c184ea9f490
-    parentId: fld_a6d266982cea43e68e4dd608bb570249
+  - _id: wrk_scratchpad
+    parentId: null
+    modified: 1699386332723
+    created: 1699386332723
+    name: Scratch Pad
+    description: ""
+    scope: collection
+    _type: workspace
+  - _id: req_bc3d536822204125b8ee420049eadfd6
+    parentId: fld_2ca268d81f8d46a6a15fd2b7904c70b2
     modified: 1698372257804
     created: 1696381035705
     url: localhost:8082/patient-ms/patients/findByCpf?cpf=06600870575
@@ -168,9 +67,9 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_59ee2986a4a9417ca0bb1ab40837276a
-    parentId: fld_a6d266982cea43e68e4dd608bb570249
-    modified: 1698521420619
+  - _id: req_80c0ca16b0954b6fab15631e4b3798cb
+    parentId: fld_2ca268d81f8d46a6a15fd2b7904c70b2
+    modified: 1699387379555
     created: 1696381215438
     url: localhost:8082/patient-ms/patients
     name: PostPatient
@@ -181,8 +80,8 @@ resources:
       text: |
         {
         		"name": "Vaaaac",
-        		"cpf": "06600870572",
-        		"email": "nainai@gmail.com",
+        		"cpf": "06600870573",
+        		"email": "caian0923@gmail.com",
         		"address":{
         			"publicPlace": "Rua 8 de Fevereiro",
         			"number": 54,
@@ -209,8 +108,8 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_fea38b48464b4b52b76b2061894724a4
-    parentId: fld_a6d266982cea43e68e4dd608bb570249
+  - _id: req_ab4817bd48ba401899c8fc683c35c772
+    parentId: fld_2ca268d81f8d46a6a15fd2b7904c70b2
     modified: 1698349529633
     created: 1696381373715
     url: localhost:8082/patient-ms/patients/1
@@ -248,8 +147,8 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_632e0dcbad714ee9967c9988f38c6f7e
-    parentId: fld_a6d266982cea43e68e4dd608bb570249
+  - _id: req_2bd9884033644b6286949dd779f83df6
+    parentId: fld_2ca268d81f8d46a6a15fd2b7904c70b2
     modified: 1698161892462
     created: 1696381435217
     url: localhost:8082/patient-ms/patients/1
@@ -271,8 +170,8 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_c88a2d3033674ec6b2336e56373cb7bd
-    parentId: fld_64817f5a5f2f46688f6d7019fc7618df
+  - _id: req_1f12848e59c84dd4aacee2bd7ebb9855
+    parentId: fld_1bbed715e57b4cf1831e20bac2d8a04d
     modified: 1698377989752
     created: 1696380904694
     url: localhost:8082/doctor-ms/doctors/findAll/0
@@ -294,22 +193,22 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: fld_64817f5a5f2f46688f6d7019fc7618df
-    parentId: wrk_75dc964df64e42c298f0b49abc1121b1
-    modified: 1696381010565
+  - _id: fld_1bbed715e57b4cf1831e20bac2d8a04d
+    parentId: wrk_scratchpad
+    modified: 1699387564501
     created: 1696380993147
     name: Doctor
     description: ""
     environment: {}
     environmentPropertyOrder: null
-    metaSortKey: -1696380993147
+    metaSortKey: -1696381017483.75
     _type: request_group
-  - _id: req_3d455cea543c4370a3c0a94b47539d7c
-    parentId: fld_64817f5a5f2f46688f6d7019fc7618df
-    modified: 1698377969452
+  - _id: req_44f7204e6d6a4702b51fd81f316ead27
+    parentId: fld_1bbed715e57b4cf1831e20bac2d8a04d
+    modified: 1699388833381
     created: 1696381107105
-    url: localhost:8082/doctor-ms/doctors/findByCrm?crm=123456
-    name: GetDoctorByName
+    url: localhost:8082/doctor-ms/doctors/findByCrm?crm=13456
+    name: GetDoctorByCrm
     description: ""
     method: GET
     body: {}
@@ -327,9 +226,9 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_f24a068615684cbfa24e479505d7b067
-    parentId: fld_64817f5a5f2f46688f6d7019fc7618df
-    modified: 1698374912385
+  - _id: req_bdffef2f92bf4653809341ad1e468ded
+    parentId: fld_1bbed715e57b4cf1831e20bac2d8a04d
+    modified: 1699387404860
     created: 1696381141859
     url: localhost:8082/doctor-ms/doctors
     name: PostDoctor
@@ -340,7 +239,7 @@ resources:
       text: |-
         {
         	"name": "naiac",
-        	"email": "nainai@gmail.com1231",
+        	"email": "caian0923@gmail.com",
         	"phone": "12312123",
         	"address": {
         		"publicPlace": "Rua 8 de Fevereiro",
@@ -351,8 +250,8 @@ resources:
         		"state": "BA",
         		"zipCode": "40313-170"
         	},
-        	"crm": "1113331",
-        	"specialty": "CARDIOLOGIST"
+        	"crm": "654321",
+        	"specialty": "GYNECOLOGIST"
         }
     parameters: []
     headers:
@@ -370,8 +269,8 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_7ec37c2f0c854bb2b385ec40684e29c2
-    parentId: fld_64817f5a5f2f46688f6d7019fc7618df
+  - _id: req_73652a858f184ae59b3f061ff615217b
+    parentId: fld_1bbed715e57b4cf1831e20bac2d8a04d
     modified: 1698161916955
     created: 1696381305526
     url: localhost:8082/doctor-ms/doctors/1
@@ -413,8 +312,8 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_5f108953eee5414aabeec0ec96cf486a
-    parentId: fld_64817f5a5f2f46688f6d7019fc7618df
+  - _id: req_6e1d9d56a0654f0ea2ad84a42734eaad
+    parentId: fld_1bbed715e57b4cf1831e20bac2d8a04d
     modified: 1698161913280
     created: 1696381400617
     url: localhost:8082/doctor-ms/doctors/1
@@ -436,29 +335,121 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: env_55cdf75a86ea4a6f978813c2e0f6218c
-    parentId: wrk_75dc964df64e42c298f0b49abc1121b1
-    modified: 1696380886175
-    created: 1696380886175
+  - _id: req_b41c112f90c546309530229005375a8c
+    parentId: fld_34932a2886b94db8b303d8862a6a9d37
+    modified: 1699387520985
+    created: 1698521668632
+    url: localhost:8082/consult-ms/Consults/cancel/3
+    name: DeleteConsult
+    description: ""
+    method: DELETE
+    body:
+      mimeType: application/json
+      text: |
+        [
+        	{
+        		"cancelReason": "batata"
+        	}
+        ]
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/8.3.0
+    authentication: {}
+    metaSortKey: -1698161807881
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_34932a2886b94db8b303d8862a6a9d37
+    parentId: wrk_scratchpad
+    modified: 1699387562459
+    created: 1698161793521
+    name: Consults
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1696381009371.5
+    _type: request_group
+  - _id: req_7a34d682ebbe4361bc590cc844b7fb4d
+    parentId: fld_34932a2886b94db8b303d8862a6a9d37
+    modified: 1698161822608
+    created: 1698161797192
+    url: localhost:8082/consult-ms/Consults
+    name: GetAllConsults
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/8.3.0
+    authentication: {}
+    metaSortKey: -1698161807781
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_27f236b7fa2740469308f51ae0e803f6
+    parentId: fld_34932a2886b94db8b303d8862a6a9d37
+    modified: 1699389629082
+    created: 1698161825273
+    url: localhost:8082/consult-ms/Consults
+    name: PostConsult
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        
+        {
+        	"crm": "123456",
+        	"cpf": "06600870575",
+        	"scheduling":{
+        		"schedule": "11 11 2023 17:30"
+        	}
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/8.3.0
+    authentication: {}
+    metaSortKey: -1698161807681
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: env_99d30891da4bdcebc63947a8fc17f076de878684
+    parentId: wrk_scratchpad
+    modified: 1699386339299
+    created: 1699386339299
     name: Base Environment
     data: {}
     dataPropertyOrder: null
     color: null
     isPrivate: false
-    metaSortKey: 1696380886175
+    metaSortKey: 1699386339299
     _type: environment
-  - _id: jar_fe3ffab2d27349819381b2a260c6f3ec
-    parentId: wrk_75dc964df64e42c298f0b49abc1121b1
-    modified: 1696380886189
-    created: 1696380886189
+  - _id: jar_99d30891da4bdcebc63947a8fc17f076de878684
+    parentId: wrk_scratchpad
+    modified: 1699386339302
+    created: 1699386339302
     name: Default Jar
     cookies: []
     _type: cookie_jar
-  - _id: spc_237564f159294680be53b260e7be6d5a
-    parentId: wrk_75dc964df64e42c298f0b49abc1121b1
-    modified: 1698335856772
-    created: 1698335856768
-    fileName: MedAppointHTTPRequests
-    contents: ""
-    contentType: yaml
-    _type: api_spec

@@ -43,24 +43,16 @@ public class PatientController {
 	}
 
 	@GetMapping("/findByCpf")
-	public ResponseEntity<PatientData> findPatientByName(String cpf) throws PatientNotFoundException{
+	public ResponseEntity<PatientData> findPatientByName(String cpf){
 		PatientData patient;
-		try {
-			patient = patientService.findByCpf(cpf);
-		} catch (PatientNotFoundException e) {
-			throw new PatientNotFoundException();
-		}
-		return  new ResponseEntity<PatientData>(patient, HttpStatus.ACCEPTED);
+		patient = patientService.findByCpf(cpf);
+		return new ResponseEntity<PatientData>(patient, HttpStatus.ACCEPTED);
 	}
 
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<PatientData> findById(@PathVariable Long id) throws PatientNotFoundException {
 		PatientData patient;
-		try {
-			patient = patientService.findById(id);
-		} catch (PatientNotFoundException e) {
-			throw new PatientNotFoundException();
-		}
+		patient = patientService.findById(id);
 		return new ResponseEntity<PatientData>(patient, HttpStatus.ACCEPTED);
 	}
 	

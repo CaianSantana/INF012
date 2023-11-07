@@ -2,6 +2,7 @@ package com.br.medConsultAPI.controllers;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,10 @@ import com.br.medConsultAPI.dtos.FormConsult;
 import com.br.medConsultAPI.exceptions.CancelReasonCannotBeNullException;
 import com.br.medConsultAPI.exceptions.CannotScheduleToThePastException;
 import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultAtTimeException;
-import com.br.medConsultAPI.exceptions.DoctorNotFoundException;
 import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
 import com.br.medConsultAPI.exceptions.MinimumThirtyMinuteNoticeException;
 import com.br.medConsultAPI.exceptions.MinimumTwentyFourHourNoticeException;
 import com.br.medConsultAPI.exceptions.NoDoctorAvailableException;
-import com.br.medConsultAPI.exceptions.PatientNotFoundException;
 import com.br.medConsultAPI.exceptions.PatientOnlyHaveOneConsultPerDayException;
 import com.br.medConsultAPI.model.Consult;
 import com.br.medConsultAPI.service.ConsultService;
@@ -44,11 +43,21 @@ public class ConsultController {
 		return service.listAllConsults();
 	}
 
+
+	@ExceptionHandler({NoSuchElementException.class, NoDoctorAvailableException.class})
+	public ResponseEntity<?> ExceptionHandler404(){
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+
 	@ExceptionHandler(ParseException.class)
+	public ResponseEntity<?> ExceptionHandler406(){
+		return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+	}
+
 	@PostMapping
 	public ResponseEntity<ConsultData> scheduleConsult(@RequestBody FormConsult data) throws PatientOnlyHaveOneConsultPerDayException, 
 	DoctorCannotHaveMoreThanOneConsultAtTimeException, NoDoctorAvailableException, InvalidSchedulingException,
-	MinimumThirtyMinuteNoticeException, PatientNotFoundException, DoctorNotFoundException, ParseException, CannotScheduleToThePastException{
+	MinimumThirtyMinuteNoticeException, ParseException, CannotScheduleToThePastException{
 		Consult consult;
 		consult = service.register(data);
 		ConsultData consultData = new ConsultData(consult, service.findDoctorByCrm(consult.getCrm()), service.findPatientByCpf(consult.getCpf()));
