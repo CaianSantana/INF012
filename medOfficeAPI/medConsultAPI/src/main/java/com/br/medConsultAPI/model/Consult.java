@@ -49,6 +49,18 @@ public class Consult {
 		this.status = Status.SCHEDULED;
 		this.cancelReason = null;
 	}
+
+	public boolean isCancelled(){
+		if(this.status == Status.CANCELLED)
+			return true;
+		return false;
+	}
+
+	public boolean isCompleted(){
+		if(this.status == Status.COMPLETED)
+			return true;
+		return false;
+	}
 	
 	public void validateConsult(List<Consult> list) throws  InvalidSchedulingException, MinimumThirtyMinuteNoticeException, PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultAtTimeException, CannotScheduleToThePastException{
 		this.scheduling.validateScheduling();

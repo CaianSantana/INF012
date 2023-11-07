@@ -17,12 +17,10 @@ import com.br.medConsultAPI.enums.Status;
 import com.br.medConsultAPI.exceptions.CancelReasonCannotBeNullException;
 import com.br.medConsultAPI.exceptions.CannotScheduleToThePastException;
 import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultAtTimeException;
-import com.br.medConsultAPI.exceptions.DoctorNotFoundException;
 import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
 import com.br.medConsultAPI.exceptions.MinimumThirtyMinuteNoticeException;
 import com.br.medConsultAPI.exceptions.MinimumTwentyFourHourNoticeException;
 import com.br.medConsultAPI.exceptions.NoDoctorAvailableException;
-import com.br.medConsultAPI.exceptions.PatientNotFoundException;
 import com.br.medConsultAPI.exceptions.PatientOnlyHaveOneConsultPerDayException;
 import com.br.medConsultAPI.model.Consult;
 import com.br.medConsultAPI.model.Scheduling;
@@ -40,16 +38,6 @@ public class ConsultService {
     @Autowired
     ConsultRepository consultRepository;
 
-	public boolean isCancelled(Consult consult) {
-		if(consult.getStatus() == Status.CANCELLED)
-        	return true;
-		return false;
-    }
-	public boolean isCompleted(Consult consult){
-		if(consult.getStatus() == Status.COMPLETED)
-			return true;
-		return false;
-	}
 
 	private String getRandomDoctor(Consult consult) throws NoDoctorAvailableException {
 		List<DoctorData> docList = this.findAllDoctors();
@@ -58,7 +46,7 @@ public class ConsultService {
 		for(int i=0; i<docList.size(); i++) {
 			for(Consult item: consultList) {
 				if(item.getCrm() == docList.get(i).crm()
-						&&!item.getScheduling().compareDate(consult.getScheduling())||!item.getScheduling().compareAll(consult.getScheduling())) {
+						&&!item.getScheduling().compareAll(consult.getScheduling())) {
 						return docList.get(i).crm();
 					}
 			}
@@ -77,13 +65,13 @@ public class ConsultService {
 	public List<ConsultData> listAllConsults(){
 		List<Consult> list = new ArrayList<Consult>();
 		for(Consult item: this.consultRepository.findAll())
-			if(!this.isCancelled(item))
+			if(!item.isCancelled())
 				list.add(item);
 		return this.converterLista(list);
 	}
 	public Consult findConsultById(Long id){
         Consult consult = this.consultRepository.findById(id).orElseThrow(() ->new NoSuchElementException());
-        if(this.isCancelled(consult))
+        if(consult.isCancelled())
 			throw new NoSuchElementException();
 		return consult;
     }
@@ -100,16 +88,16 @@ public class ConsultService {
         return patient;
     }
 
-	public Consult register(FormConsult data) throws DoctorNotFoundException, PatientNotFoundException,
-	PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultAtTimeException, NoDoctorAvailableException, InvalidSchedulingException, MinimumThirtyMinuteNoticeException, ParseException, CannotScheduleToThePastException {
+	public Consult register(FormConsult data) throws PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultAtTimeException, NoDoctorAvailableException, 
+	InvalidSchedulingException, MinimumThirtyMinuteNoticeException, ParseException, CannotScheduleToThePastException {
 		Consult consult = new Consult(data);
 		consult.validateConsult(this.consultRepository.findAll());
 		if(data.crm() ==null) {
 			consult.setCrm((getRandomDoctor(consult)));
 		}else if(this.findDoctorByCrm(data.crm()) == null)
-			throw new DoctorNotFoundException();
+			throw new NoSuchElementException();
 		if(this.findPatientByCpf(data.cpf())==null)	
-			throw new PatientNotFoundException();
+			throw new NoSuchElementException();
 		this.consultRepository.save(consult);
 		return consult;
 	}
