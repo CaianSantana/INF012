@@ -61,11 +61,6 @@ public class Scheduling {
 			|| calendar.get(Calendar.YEAR)<currentCalendar.get(Calendar.YEAR)
 			|| calendar.get(Calendar.YEAR)>currentCalendar.get(Calendar.YEAR)+1)
 			throw new InvalidSchedulingException();
-		System.out.println((calendar.get(Calendar.DAY_OF_YEAR) == currentCalendar.get(Calendar.DAY_OF_YEAR)));
-		System.out.println(currentHour == hour);
-		System.out.println((minute - currentMinute)<30);
-		System.out.println(currentHour==(hour-1));
-		System.out.println(((60-currentMinute)+minute)<30);
 		if((calendar.get(Calendar.DAY_OF_YEAR) == currentCalendar.get(Calendar.DAY_OF_YEAR) && currentHour == hour && (minute - currentMinute)<30)
 			||(currentHour==(hour-1) && ((60-currentMinute)+minute)<30))
 			throw new MinimumThirtyMinuteNoticeException();
