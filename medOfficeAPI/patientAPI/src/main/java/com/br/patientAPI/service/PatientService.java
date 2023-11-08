@@ -65,7 +65,7 @@ public class PatientService {
 		if(patient.hasNull()) {
 			throw new NullValueException();
 		}
-		if(this.patientRepository.findByCpfContaining(patient.getCpf()) != null)
+		if(this.patientRepository.findByCpfContaining(patient.getCpf()).isPresent())
 			throw new CpfAlreadyExistsException();
 		patientRepository.save(patient);
 		return patient;

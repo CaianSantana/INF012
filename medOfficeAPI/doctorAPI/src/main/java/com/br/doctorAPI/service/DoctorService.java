@@ -40,7 +40,7 @@ public class DoctorService {
 		Doctor doctor = new Doctor(data);
 		if(doctor.hasNull())
 			throw new NullValuesException();
-		if(this.doctorRepository.findByCrmContaining(doctor.getCrm())!=null)
+		if(this.doctorRepository.findByCrmContaining(doctor.getCrm()).isPresent())
 			throw new CrmAlreadyExistsException();
 		doctorRepository.save(doctor);
 		return doctor;
@@ -48,7 +48,7 @@ public class DoctorService {
 
 	public DoctorData findByCrm(String crm){
 		try {
-			Doctor doctor = this.doctorRepository.findByCrmContaining(crm).get();
+			Doctor doctor = this.doctorRepository.findByCrmContaining(crm).orElseThrow(()->new NoSuchElementException());
 			if(!doctor.isActive())
 				return null;
 			return new DoctorData(doctor);
@@ -59,7 +59,7 @@ public class DoctorService {
 	
 	public DoctorData findById(Long id){
 		try {
-			Doctor doctor = this.doctorRepository.findById(id).get();
+			Doctor doctor = this.doctorRepository.findById(id).orElseThrow(()->new NoSuchElementException());
 			if(!doctor.isActive()) {
 				return null;
 			}
