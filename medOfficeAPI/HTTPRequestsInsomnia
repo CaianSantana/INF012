@@ -1,10 +1,10 @@
 _type: export
 __export_format: 4
-__export_date: 2023-11-07T20:40:55.846Z
+__export_date: 2023-11-09T00:09:29.992Z
 __export_source: insomnia.desktop.app:v8.3.0
 resources:
-  - _id: req_81afcebccf074aea96abf72173f3011f
-    parentId: fld_2ca268d81f8d46a6a15fd2b7904c70b2
+  - _id: req_8a166e024265435594e869878cf11fb5
+    parentId: fld_c4dfcb28c8dd42f6b08a4d1951a1d394
     modified: 1698345187525
     created: 1696380947597
     url: localhost:8082/patient-ms/patients/findAll/0
@@ -26,7 +26,7 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: fld_2ca268d81f8d46a6a15fd2b7904c70b2
+  - _id: fld_c4dfcb28c8dd42f6b08a4d1951a1d394
     parentId: wrk_scratchpad
     modified: 1696381025596
     created: 1696381025596
@@ -38,14 +38,14 @@ resources:
     _type: request_group
   - _id: wrk_scratchpad
     parentId: null
-    modified: 1699386332723
-    created: 1699386332723
+    modified: 1699483827220
+    created: 1699483827220
     name: Scratch Pad
     description: ""
     scope: collection
     _type: workspace
-  - _id: req_bc3d536822204125b8ee420049eadfd6
-    parentId: fld_2ca268d81f8d46a6a15fd2b7904c70b2
+  - _id: req_6dafdef3d6bc4672be486704d74394f8
+    parentId: fld_c4dfcb28c8dd42f6b08a4d1951a1d394
     modified: 1698372257804
     created: 1696381035705
     url: localhost:8082/patient-ms/patients/findByCpf?cpf=06600870575
@@ -67,8 +67,8 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_80c0ca16b0954b6fab15631e4b3798cb
-    parentId: fld_2ca268d81f8d46a6a15fd2b7904c70b2
+  - _id: req_3bef126184d84fcb8a757a1472478f1d
+    parentId: fld_c4dfcb28c8dd42f6b08a4d1951a1d394
     modified: 1699387379555
     created: 1696381215438
     url: localhost:8082/patient-ms/patients
@@ -108,11 +108,11 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_ab4817bd48ba401899c8fc683c35c772
-    parentId: fld_2ca268d81f8d46a6a15fd2b7904c70b2
-    modified: 1698349529633
+  - _id: req_563d9a546e6443b3846b1e4fab1e5354
+    parentId: fld_c4dfcb28c8dd42f6b08a4d1951a1d394
+    modified: 1699488528901
     created: 1696381373715
-    url: localhost:8082/patient-ms/patients/1
+    url: localhost:8082/patient-ms/patients/2
     name: PutPatient
     description: ""
     method: PUT
@@ -147,8 +147,8 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_2bd9884033644b6286949dd779f83df6
-    parentId: fld_2ca268d81f8d46a6a15fd2b7904c70b2
+  - _id: req_53f32bedabfd49128caa119f5d65ae36
+    parentId: fld_c4dfcb28c8dd42f6b08a4d1951a1d394
     modified: 1698161892462
     created: 1696381435217
     url: localhost:8082/patient-ms/patients/1
@@ -170,8 +170,8 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_1f12848e59c84dd4aacee2bd7ebb9855
-    parentId: fld_1bbed715e57b4cf1831e20bac2d8a04d
+  - _id: req_f7d78e5b23c647cc8c9188ce37ab7eb0
+    parentId: fld_0fa33988a98249e08aaafe1b4ac96bec
     modified: 1698377989752
     created: 1696380904694
     url: localhost:8082/doctor-ms/doctors/findAll/0
@@ -193,7 +193,7 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: fld_1bbed715e57b4cf1831e20bac2d8a04d
+  - _id: fld_0fa33988a98249e08aaafe1b4ac96bec
     parentId: wrk_scratchpad
     modified: 1699387564501
     created: 1696380993147
@@ -203,8 +203,8 @@ resources:
     environmentPropertyOrder: null
     metaSortKey: -1696381017483.75
     _type: request_group
-  - _id: req_44f7204e6d6a4702b51fd81f316ead27
-    parentId: fld_1bbed715e57b4cf1831e20bac2d8a04d
+  - _id: req_bb1cfd60633a4aa7b0ae4efb2bddc0c3
+    parentId: fld_0fa33988a98249e08aaafe1b4ac96bec
     modified: 1699388833381
     created: 1696381107105
     url: localhost:8082/doctor-ms/doctors/findByCrm?crm=13456
@@ -226,9 +226,9 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_bdffef2f92bf4653809341ad1e468ded
-    parentId: fld_1bbed715e57b4cf1831e20bac2d8a04d
-    modified: 1699387404860
+  - _id: req_3dcaf42a8b8f43108875c3b054f4bb52
+    parentId: fld_0fa33988a98249e08aaafe1b4ac96bec
+    modified: 1699488339730
     created: 1696381141859
     url: localhost:8082/doctor-ms/doctors
     name: PostDoctor
@@ -242,7 +242,7 @@ resources:
         	"email": "caian0923@gmail.com",
         	"phone": "12312123",
         	"address": {
-        		"publicPlace": "Rua 8 de Fevereiro",
+        		"publicPlace": "Rua",
         		"number": 54,
         		"complement": null,
         		"neighborhood":"Nova Cidade",
@@ -250,7 +250,7 @@ resources:
         		"state": "BA",
         		"zipCode": "40313-170"
         	},
-        	"crm": "654321",
+        	"crm": "6543321",
         	"specialty": "GYNECOLOGIST"
         }
     parameters: []
@@ -269,9 +269,9 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_73652a858f184ae59b3f061ff615217b
-    parentId: fld_1bbed715e57b4cf1831e20bac2d8a04d
-    modified: 1698161916955
+  - _id: req_689137fa385e43ca93ecbe21db2ead36
+    parentId: fld_0fa33988a98249e08aaafe1b4ac96bec
+    modified: 1699488495119
     created: 1696381305526
     url: localhost:8082/doctor-ms/doctors/1
     name: PutDoctor
@@ -282,19 +282,15 @@ resources:
       text: |-
         {
         		"name": "Naaac",
-        		"cpf": "06600870575",
-        		"email": "nainai@gmail.com",
         		"address":{
-        			"public_Place": "Rua 8 de Fevereiro",
+        			"publicPlace": "Rua 8 de Fevereiro",
         			"number": null,
         			"complement": null,
         			"neighborhood":"Nova Cidade",
         			"city": "Salvador",
         			"state": "BA",
-        			"zip_Code": "40313-170"
-        		},
-        		"crm": "123456",
-        		"specialty": "CARDIOLOGIST"
+        			"zipCode": "40313-170"
+        		}
         }
     parameters: []
     headers:
@@ -312,8 +308,8 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_6e1d9d56a0654f0ea2ad84a42734eaad
-    parentId: fld_1bbed715e57b4cf1831e20bac2d8a04d
+  - _id: req_3acd13210b884cfe9cd79da02ea6a5f8
+    parentId: fld_0fa33988a98249e08aaafe1b4ac96bec
     modified: 1698161913280
     created: 1696381400617
     url: localhost:8082/doctor-ms/doctors/1
@@ -335,8 +331,8 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_b41c112f90c546309530229005375a8c
-    parentId: fld_34932a2886b94db8b303d8862a6a9d37
+  - _id: req_f283aa7766f54f139c85ee79c12028fb
+    parentId: fld_393eb0c1c75642f79eb5e1530dbc6250
     modified: 1699387520985
     created: 1698521668632
     url: localhost:8082/consult-ms/Consults/cancel/3
@@ -367,7 +363,7 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: fld_34932a2886b94db8b303d8862a6a9d37
+  - _id: fld_393eb0c1c75642f79eb5e1530dbc6250
     parentId: wrk_scratchpad
     modified: 1699387562459
     created: 1698161793521
@@ -377,8 +373,8 @@ resources:
     environmentPropertyOrder: null
     metaSortKey: -1696381009371.5
     _type: request_group
-  - _id: req_7a34d682ebbe4361bc590cc844b7fb4d
-    parentId: fld_34932a2886b94db8b303d8862a6a9d37
+  - _id: req_c341ebaa36ca4e2aae622276ec738e48
+    parentId: fld_393eb0c1c75642f79eb5e1530dbc6250
     modified: 1698161822608
     created: 1698161797192
     url: localhost:8082/consult-ms/Consults
@@ -400,9 +396,9 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_27f236b7fa2740469308f51ae0e803f6
-    parentId: fld_34932a2886b94db8b303d8862a6a9d37
-    modified: 1699389629082
+  - _id: req_c600f13f20d8451ebff4095766e9cf3b
+    parentId: fld_393eb0c1c75642f79eb5e1530dbc6250
+    modified: 1699486522882
     created: 1698161825273
     url: localhost:8082/consult-ms/Consults
     name: PostConsult
@@ -413,8 +409,8 @@ resources:
       text: |-
         
         {
-        	"crm": "123456",
-        	"cpf": "06600870575",
+        	"crm": "654321",
+        	"cpf": "06600870573",
         	"scheduling":{
         		"schedule": "11 11 2023 17:30"
         	}
@@ -437,19 +433,19 @@ resources:
     _type: request
   - _id: env_99d30891da4bdcebc63947a8fc17f076de878684
     parentId: wrk_scratchpad
-    modified: 1699386339299
-    created: 1699386339299
+    modified: 1699483833142
+    created: 1699483833142
     name: Base Environment
     data: {}
     dataPropertyOrder: null
     color: null
     isPrivate: false
-    metaSortKey: 1699386339299
+    metaSortKey: 1699483833142
     _type: environment
   - _id: jar_99d30891da4bdcebc63947a8fc17f076de878684
     parentId: wrk_scratchpad
-    modified: 1699386339302
-    created: 1699386339302
+    modified: 1699483833231
+    created: 1699483833231
     name: Default Jar
     cookies: []
     _type: cookie_jar

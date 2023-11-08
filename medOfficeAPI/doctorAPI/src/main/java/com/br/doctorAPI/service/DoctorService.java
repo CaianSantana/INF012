@@ -80,12 +80,10 @@ public class DoctorService {
 			doctor.setName(data.name());
 			doctor.setAddress(new Address(data.address()));
 			doctor.setPhone(data.phone());
-			if(data.email() != null
-			&&data.crm() != null
-			&&data.specialty() != null){
-				if(!data.email().equals(doctor.getEmail())
-				||(data.crm().equals(doctor.getCrm())
-				||data.specialty() != doctor.getSpecialty()))
+			if(data.email() != null&&data.crm() != null&&data.specialty() != null){
+				if(data.email() !=doctor.getEmail()
+				||data.crm()!=doctor.getCrm()
+				||data.specialty() != doctor.getSpecialty())
 				throw new OperationNotAllowedException();
 			}
 			if(doctor.hasNull())

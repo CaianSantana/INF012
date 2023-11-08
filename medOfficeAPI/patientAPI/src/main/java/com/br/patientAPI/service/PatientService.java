@@ -81,10 +81,9 @@ public class PatientService {
 		Patient patient = this.patientRepository.getReferenceById(id);
 		patient.setName(data.name());
 		patient.setAddress(new Address(data.address()));
-		if(data.cpf()!=null
-		&&data.email()!=null){
-			if(!data.email().equals(patient.getEmail())
-			||!data.cpf().equals(patient.getCpf()))
+		if(data.cpf()!=null&&data.email()!=null){
+			if(data.email()!=patient.getEmail()
+			||data.cpf()!=patient.getCpf())
 				throw new OperationNotAllowedException();
 		}
 		if(patient.hasNull())
