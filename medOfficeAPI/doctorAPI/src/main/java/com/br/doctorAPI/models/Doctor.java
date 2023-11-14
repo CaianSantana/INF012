@@ -44,6 +44,12 @@ public class Doctor implements HasNull {
 		this.status = Status.ACTIVE;
 	}
 
+	public Boolean isActive() {
+		if(this.status == Status.ACTIVE)
+			return true;
+		return false;
+	}
+
 	public boolean hasNull() {
 		if(this.getName() == null
 				||this.getEmail()== null

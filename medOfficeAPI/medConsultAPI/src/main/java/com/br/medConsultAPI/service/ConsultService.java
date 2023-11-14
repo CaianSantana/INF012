@@ -3,10 +3,7 @@ package com.br.medConsultAPI.service;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,12 +17,10 @@ import com.br.medConsultAPI.enums.Status;
 import com.br.medConsultAPI.exceptions.CancelReasonCannotBeNullException;
 import com.br.medConsultAPI.exceptions.CannotScheduleToThePastException;
 import com.br.medConsultAPI.exceptions.DoctorCannotHaveMoreThanOneConsultAtTimeException;
-import com.br.medConsultAPI.exceptions.DoctorNotFoundException;
 import com.br.medConsultAPI.exceptions.InvalidSchedulingException;
 import com.br.medConsultAPI.exceptions.MinimumThirtyMinuteNoticeException;
 import com.br.medConsultAPI.exceptions.MinimumTwentyFourHourNoticeException;
 import com.br.medConsultAPI.exceptions.NoDoctorAvailableException;
-import com.br.medConsultAPI.exceptions.PatientNotFoundException;
 import com.br.medConsultAPI.exceptions.PatientOnlyHaveOneConsultPerDayException;
 import com.br.medConsultAPI.model.Consult;
 import com.br.medConsultAPI.model.Scheduling;
@@ -43,20 +38,6 @@ public class ConsultService {
     @Autowired
     ConsultRepository consultRepository;
 
-	public Map<String, DoctorData> doctorMap= new HashMap<String, DoctorData>();;
-    public Map<String, PatientData> patientMap= new HashMap<String, PatientData>();
-    public Map<Long, Consult> consultMap= new HashMap<Long, Consult>();
-
-	public boolean isCancelled(Consult consult) {
-		if(consult.getStatus() == Status.CANCELLED)
-        	return true;
-		return false;
-    }
-	public boolean isCompleted(Consult consult){
-		if(consult.getStatus() == Status.COMPLETED)
-			return true;
-		return false;
-	}
 
 	private String getRandomDoctor(Consult consult) throws NoDoctorAvailableException {
 		List<DoctorData> docList = this.findAllDoctors();
@@ -65,7 +46,7 @@ public class ConsultService {
 		for(int i=0; i<docList.size(); i++) {
 			for(Consult item: consultList) {
 				if(item.getCrm() == docList.get(i).crm()
-						&&!item.getScheduling().compareDate(consult.getScheduling())||!item.getScheduling().compareAll(consult.getScheduling())) {
+						&&!item.getScheduling().compareAll(consult.getScheduling())) {
 						return docList.get(i).crm();
 					}
 			}
@@ -74,7 +55,7 @@ public class ConsultService {
 	}
 	
 	public List<ConsultData> converterLista(List<Consult> list){
-		List<ConsultData> listDTO = new LinkedList<ConsultData>();
+		List<ConsultData> listDTO = new ArrayList<ConsultData>();
 		for(Consult item: list){
 			listDTO.add(new ConsultData(item, findDoctorByCrm(item.getCrm()), findPatientByCpf(item.getCpf())));
 		}
@@ -83,52 +64,40 @@ public class ConsultService {
 
 	public List<ConsultData> listAllConsults(){
 		List<Consult> list = new ArrayList<Consult>();
-		list.addAll(this.consultRepository.findAll());
+		for(Consult item: this.consultRepository.findAll())
+			if(!item.isCancelled())
+				list.add(item);
 		return this.converterLista(list);
 	}
 	public Consult findConsultById(Long id){
-        Consult consult = consultMap.get(id);
-        if(consult == null )
-            consult = this.consultRepository.findById(id).get();           
-        if(this.consultRepository.findById(id).isEmpty() || this.isCancelled(consult))
+        Consult consult = this.consultRepository.findById(id).orElseThrow(() ->new NoSuchElementException());
+        if(consult.isCancelled())
 			throw new NoSuchElementException();
-        consultMap.put(id, consult);
 		return consult;
     }
 	public List<DoctorData> findAllDoctors() {
         List<DoctorData> list = doctorClient.findAllDoctors(0);
-        doctorMap.clear();
-        for(DoctorData item: list)
-            doctorMap.put(item.crm(), item);
         return list;
     }
 	public DoctorData findDoctorByCrm(String crm){
-        DoctorData doctor = doctorMap.get(crm);
-        if(doctor == null){
-            doctor = doctorClient.findDoctorByCrm(crm);
-            doctorMap.put(crm, doctor);
-        } 
+        DoctorData doctor = doctorClient.findDoctorByCrm(crm);
         return doctor;
     }
 	public PatientData findPatientByCpf(String cpf){
-        PatientData patient = patientMap.get(cpf);
-        if(patient == null){
-            patient = patientClient.findPatientByCpf(cpf);
-            patientMap.put(cpf, patient);
-        }
+        PatientData patient = patientClient.findPatientByCpf(cpf);
         return patient;
     }
 
-	public Consult register(FormConsult data) throws DoctorNotFoundException, PatientNotFoundException,
-	PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultAtTimeException, NoDoctorAvailableException, InvalidSchedulingException, MinimumThirtyMinuteNoticeException, ParseException, CannotScheduleToThePastException {
+	public Consult register(FormConsult data) throws PatientOnlyHaveOneConsultPerDayException, DoctorCannotHaveMoreThanOneConsultAtTimeException, NoDoctorAvailableException, 
+	InvalidSchedulingException, MinimumThirtyMinuteNoticeException, ParseException, CannotScheduleToThePastException {
 		Consult consult = new Consult(data);
 		consult.validateConsult(this.consultRepository.findAll());
 		if(data.crm() ==null) {
 			consult.setCrm((getRandomDoctor(consult)));
 		}else if(this.findDoctorByCrm(data.crm()) == null)
-			throw new DoctorNotFoundException();
+			throw new NoSuchElementException();
 		if(this.findPatientByCpf(data.cpf())==null)	
-			throw new PatientNotFoundException();
+			throw new NoSuchElementException();
 		this.consultRepository.save(consult);
 		return consult;
 	}

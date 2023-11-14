@@ -12,5 +12,5 @@ import com.br.doctorAPI.models.Doctor;
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 	Page<Doctor> findAllByStatus(Pageable pageable, Status Status);
 	Optional<Doctor> findById(Long id);
-	Doctor findByCrmContaining(String crm);
+	Optional<Doctor> findByCrmContaining(String crm);
 }

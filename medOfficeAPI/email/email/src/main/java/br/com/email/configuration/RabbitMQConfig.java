@@ -1,6 +1,11 @@
-package com.br.medConsultAPI;
+package br.com.email.configuration;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -10,20 +15,36 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
 @Configuration
 public class RabbitMQConfig {
-
+    
+        
     @Bean
-    public FanoutExchange fanoutExchange(){
-        return new FanoutExchange("medConsultAPI.v1.consult-scheduled");
+    public Queue queue(){
+        Map<String, Object> args = new HashMap<>();
+        args.put("x-dead-letter-exchange", "medConsultAPI.v1.consult-scheduled.dlx");
+        return new Queue("medConsultAPI.v1.consult-scheduled.send-email", true, false, false, args);
     }
 
     @Bean
-    public FanoutExchange fanoutExchangeDLX(){
-        return new FanoutExchange("medConsultAPI.v1.consult-scheduled.dlx");
+    public Binding binding(){
+        Queue queue = new Queue("medConsultAPI.v1.consult-scheduled.send-email");
+        FanoutExchange exchange = new FanoutExchange("medConsultAPI.v1.consult-scheduled");
+        return BindingBuilder.bind(queue).to(exchange);
     }
 
+    @Bean
+    public Queue queueDLQ(){
+        return new Queue("medConsultAPI.v1.consult-scheduled.dlx.send-email.dlq");
+    }
+
+    @Bean
+    public Binding bindingDLQ(){
+        Queue queue = queueDLQ();
+        FanoutExchange exchange = new FanoutExchange("medConsultAPI.v1.consult-scheduled.dlx");
+        return BindingBuilder.bind(queue).to(exchange);
+    }
+    
     @Bean
     public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory){
         return new RabbitAdmin(connectionFactory);
@@ -46,4 +67,5 @@ public class RabbitMQConfig {
         rabbitTemplate.setMessageConverter(messageConverter);
         return rabbitTemplate;
     }
+
 }
