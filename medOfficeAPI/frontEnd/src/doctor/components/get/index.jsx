@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react'
 
-function getPatient(){
+function GetPatient(){
 
-    const [repositories, setRepositories] = useState([])
+    const [person, setPerson] = useState([])
   
     useEffect(() => {
-      fetch("http://localhost:8082/patient-ms/patients/findAll/0")
+      fetch("http://localhost:8082/doctor-ms/doctors/findAll/0")
       .then(Response => Response.json())
       .then(data => {
-        setRepositories(data);
+        setPerson(data);
       })
     }, [])
   
     return(
       <ul>
-        {repositories.map(patient => {
+        {person.map(patient => {
           return (
             <li key={patient.name}>
               <strong>{patient.name}</strong>
@@ -26,4 +26,4 @@ function getPatient(){
     )
   }
 
-  export default getPatient
+  export default GetPatient

@@ -2,29 +2,13 @@ import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import GetPatient from './patient/components/get'
+import PostPatient from './patient/components/post'
+import DeletePatient from './patient/components/delete'
 
 function App() {
-  const [repositories, setRepositories] = useState([])
-  
-  useEffect(() => {
-    fetch("http://localhost:8082/patient-ms/patients/findAll/0")
-    .then(Response => Response.json())
-    .then(data => {
-      setRepositories(data);
-    })
-  }, [])
-
   return(
-    <ul>
-      {repositories.map(patient => {
-        return (
-          <li key={patient.name}>
-            <strong>{patient.name}</strong>
-            <p>{patient.email}</p>
-          </li>
-        )
-        })}
-    </ul>
+   <DeletePatient/>
   )
 }
 
