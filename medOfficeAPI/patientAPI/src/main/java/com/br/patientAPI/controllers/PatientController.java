@@ -30,7 +30,6 @@ import com.br.patientAPI.service.PatientService;
 @RestController
 @RequestMapping("/patients")
 public class PatientController {
-
 	
 	@Autowired
 	private PatientService patientService;
