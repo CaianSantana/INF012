@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-function GetPatient(){
+function GetDoctor(){
 
     const [person, setPerson] = useState([])
   
@@ -14,16 +14,19 @@ function GetPatient(){
   
     return(
       <ul>
-        {person.map(patient => {
+        {person.map(doctor => {
           return (
-            <li key={patient.name}>
-              <strong>{patient.name}</strong>
-              <p>{patient.email}</p>
-            </li>
+            <ul>
+              <li key={doctor.id}>
+                <strong>{doctor.name}</strong>
+                <p>{doctor.specialty}</p>
+                <p>{doctor.email}</p>
+              </li>
+            </ul>
           )
           })}
       </ul>
     )
   }
 
-  export default GetPatient
+  export default GetDoctor

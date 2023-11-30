@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 
-function DeleteDoctor(){
+function DeleteConsult(){
 
     useEffect(() => {
-        fetch('http://localhost:8082/doctor-ms/doctors/2', {
+        fetch('http://localhost:8082/consult-ms/consults/1', {
             method: "DELETE",
         })
         .then(response => response.json()) 
@@ -11,8 +11,8 @@ function DeleteDoctor(){
     }, [])
   
     return(
-      <h1>Deletado com sucesso!</h1>
+      <h1>Consulta deletada com sucesso!</h1>
     )
   }
 
-  export default DeleteDoctor
+  export default DeleteConsult

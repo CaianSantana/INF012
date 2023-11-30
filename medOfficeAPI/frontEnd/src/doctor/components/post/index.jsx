@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-function PostPatient(){
+function PostDoctor(){
     // dados a serem enviados pela solicitação POST
     let data = {
 		name: "Caca",
@@ -39,6 +39,6 @@ function PostPatient(){
     )
   }
 
-  export default PostPatient
+  export default PostDoctor
 
 
