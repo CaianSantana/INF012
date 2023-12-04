@@ -7,6 +7,7 @@ const itemsPerPage = 10;
 const getDoctors = async (page) => {
   try {
     const response = await axios.get(`${baseUrl}/findAll/${page}`);
+    console.log('Dados recebidos da API:', response.data);
     return response.data;
   } catch (error) {
     console.error('Erro ao obter médicos', error);
