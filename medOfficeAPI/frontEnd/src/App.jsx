@@ -1,18 +1,21 @@
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import GetPatient from './patient/components/get'
-import PostPatient from './patient/components/post'
-import DeletePatient from './patient/components/delete'
-import PostConsult from './consult/components/post'
-import PostDoctor from './doctor/components/post'
-import GetDoctor from './doctor/components/get'
+import React from 'react';
+import {BrowserRouter, Routes ,Route } from 'react-router-dom';
+import DoctorTable from './entities/DoctorTable';
+import PatientTable from './entities/PatientTable';
+import ConsultTable from './entities/ConsultTable';
+import Home from './components/Home';
 
 function App() {
-  return(
-   <GetDoctor/>
-  )
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/doctor' element={<DoctorTable/>} />
+        <Route path='/consult' element={<ConsultTable/>} />
+        <Route path='/patient' element={<PatientTable/>} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
