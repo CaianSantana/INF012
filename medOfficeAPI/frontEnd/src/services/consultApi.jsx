@@ -1,6 +1,6 @@
 import axios from './Api';
 
-const baseUrl = '/consult-ms/consults';
+const baseUrl = '/consult-ms/Consults';
 
 const getConsults = async () => {
   try {

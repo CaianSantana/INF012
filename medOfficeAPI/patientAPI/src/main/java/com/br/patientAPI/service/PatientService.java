@@ -13,7 +13,6 @@ import com.br.patientAPI.enums.Status;
 import com.br.patientAPI.exceptions.CpfAlreadyExistsException;
 import com.br.patientAPI.exceptions.NullValueException;
 import com.br.patientAPI.exceptions.OperationNotAllowedException;
-import com.br.patientAPI.models.Address;
 import com.br.patientAPI.models.Patient;
 import com.br.patientAPI.repositories.PatientRepository;
 
@@ -80,7 +79,6 @@ public class PatientService {
 	public Patient update(Long id, FormPatient data) throws NullValueException, OperationNotAllowedException {
 		Patient patient = this.patientRepository.getReferenceById(id);
 		patient.setName(data.name());
-		patient.setAddress(new Address(data.address()));
 		if(data.cpf()!=null&&data.email()!=null){
 			if(data.email()!=patient.getEmail()
 			||data.cpf()!=patient.getCpf())

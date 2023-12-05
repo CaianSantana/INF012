@@ -11,7 +11,7 @@ const DoctorTable = () => {
         try {
             await deleteDoctor(doctorId);
             console.log(`Médico removido com sucesso`);
-            fetchData();
+            fetchData(currentPage);
         } catch (error) {
             console.error('Erro ao remover médico', error);
         }

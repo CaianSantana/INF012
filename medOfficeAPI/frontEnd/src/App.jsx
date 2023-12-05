@@ -1,8 +1,8 @@
 import React from 'react';
 import {BrowserRouter, Routes ,Route } from 'react-router-dom';
-import DoctorTable from './entities/DoctorTable';
-import PatientTable from './entities/PatientTable';
-import ConsultTable from './entities/ConsultTable';
+import DoctorTable from './pages/DoctorTable';
+import PatientTable from './pages/PatientTable';
+import ConsultTable from './pages/ConsultTable';
 import Home from './components/Home';
 
 function App() {

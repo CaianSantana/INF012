@@ -10,6 +10,7 @@ const ConsultTable = () => {
         try {
         await deleteConsult(consultId);
         console.log(`Médico removido com sucesso`);
+        fetchData();
         } catch (error) {
         console.error('Erro ao remover médico', error);
         }

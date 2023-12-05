@@ -15,20 +15,24 @@ const getPatients = async (page) => {
 };
 
 const addPatient = async (newPatientData) => {
+  console.log("ADD")
     try {
       const response = await axios.post(baseUrl, newPatientData);
       return response.data;
     } catch (error) {
       console.error('Erro ao adicionar pacientes', error);
+      console.log(newPatientData)
       throw error;
     }
   };
   
   const updatePatient = async (patientId, updatedPatientData) => {
+    console.log("PUT")
     try {
       const response = await axios.put(`${baseUrl}/${patientId}`, updatedPatientData);
       return response.data;
     } catch (error) {
+      console.log(updatedPatientData)
       console.error('Erro ao atualizar pacientes', error);
       throw error;
     }

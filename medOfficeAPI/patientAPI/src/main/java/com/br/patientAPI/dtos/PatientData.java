@@ -2,10 +2,10 @@ package com.br.patientAPI.dtos;
 
 import com.br.patientAPI.models.Patient;
 
-public record PatientData( String name, String cpf, String email) {
+public record PatientData(Long id, String name, String cpf, String email) {
 
 	public PatientData(Patient patient) {
-		this(patient.getName(), patient.getCpf(), patient.getEmail());
+		this(patient.getId(), patient.getName(), patient.getCpf(), patient.getEmail());
 	}
 }
 
