@@ -39,6 +39,18 @@
   margin-bottom: 15px;
 }
 
+.schedule-form-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.schedule-form-section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
 label {
   margin-bottom: 5px;
 }

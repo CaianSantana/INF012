@@ -10,6 +10,18 @@ const AddressForm = ({ onChange, disabled  }) => {
       state: '',
       zipCode: '',
     });
+
+    const resetData = () =>{
+      setAddressData({
+        publicPlace: '',
+        number: '',
+        complement: '',
+        neighborhood: '',
+        city: '',
+        state: '',
+        zipCode: '',
+      });
+    }
   
     const handleChange = (e) => {
       const { name, value } = e.target;
@@ -20,7 +32,6 @@ const AddressForm = ({ onChange, disabled  }) => {
           [name]: value,
         }));
       }
-  
       const { address, ...restPatientData } = addressData;
       onChange({
         ...restPatientData,
@@ -29,6 +40,7 @@ const AddressForm = ({ onChange, disabled  }) => {
           [name]: value,
         },
       });
+      resetData()
     };
 
     return (

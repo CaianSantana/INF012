@@ -27,7 +27,7 @@ const TableBody = ({ data, columns, onDelete, onEdit }) => {
               Apagar
             </button>
             <button onClick={() => onEdit(row)}>
-              Editar
+              Selecionar
             </button>
           </td>
         </tr>
@@ -63,11 +63,11 @@ const EntityTable = ({ fetchData, onDelete, onEdit, columns }) => {
     fetchDataAndSetData();
 
     // Subscreva ao evento 'patientAdded' para atualizar os dados quando um novo paciente for adicionado
-    EventBus.subscribe('patientAdded', fetchDataAndSetData);
+    EventBus.subscribe('itemAdded', fetchDataAndSetData);
 
     // Remova a assinatura do evento ao desmontar o componente
     return () => {
-      EventBus.unsubscribe('patientAdded', fetchDataAndSetData);
+      EventBus.unsubscribe('itemAdded', fetchDataAndSetData);
     };
   }, [fetchData]);
 

@@ -13,7 +13,6 @@ import com.br.doctorAPI.enums.Status;
 import com.br.doctorAPI.exception.CrmAlreadyExistsException;
 import com.br.doctorAPI.exception.NullValuesException;
 import com.br.doctorAPI.exception.OperationNotAllowedException;
-import com.br.doctorAPI.models.Address;
 import com.br.doctorAPI.models.Doctor;
 import com.br.doctorAPI.repositories.DoctorRepository;
 
@@ -78,7 +77,6 @@ public class DoctorService {
 	public void update(Long id, FormDoctor data) throws NullValuesException, OperationNotAllowedException {
 			Doctor doctor = this.doctorRepository.getReferenceById(id);
 			doctor.setName(data.name());
-			doctor.setAddress(new Address(data.address()));
 			doctor.setPhone(data.phone());
 			if(data.email() != null&&data.crm() != null&&data.specialty() != null){
 				if(data.email() !=doctor.getEmail()

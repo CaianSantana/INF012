@@ -23,9 +23,11 @@ const addConsult = async (newConsultData) => {
   };
   
 
-  const deleteConsult = async (consultId) => {
+  const deleteConsult = async (consultId, cancelReason) => {
     try {
-      const response = await axios.delete(`${baseUrl}/${consultId}`);
+      const response = await axios.delete(`${baseUrl}/cancel/${consultId}`, {
+        data: { cancelReason }, // Envie os dados no corpo da solicitação
+      });
       return response.data;
     } catch (error) {
       console.error(`Erro ao remover consulta de ID ${consultId}`, error);
